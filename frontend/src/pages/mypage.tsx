@@ -16,6 +16,9 @@ import { useRecoilValue } from "recoil";
 import userAtom from "../../recoil/atom/userAtoms";
 import ProtectRoute from "../../components/ProtectRoute";
 
+// CSSインポート
+import styles from "../styles/common.module.css";
+
 const MyPage = () => {
   const router = useRouter();
   const { signout } = useAuth();
@@ -116,14 +119,7 @@ const MyPage = () => {
           <title>マイページ</title>
         </PageHead>
         <Container component="main" maxWidth="xs">
-          <Box
-            sx={{
-              marginTop: 8,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
+          <Box className={styles.mainContainer}>
             <Typography component="h1" variant="h5">
               アカウントを編集
             </Typography>
@@ -182,13 +178,7 @@ const MyPage = () => {
               </Button>
             </Box>
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
+          <Box className={styles.optionContainer}>
             <BackLink />
             <Button onClick={handleDeleteUser}>ユーザアカウント削除</Button>
           </Box>

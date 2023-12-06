@@ -12,6 +12,9 @@ import { DatePicker } from "@mui/x-date-pickers";
 import PageHead from "../../components/PageHead";
 import HomeLink from "../../components/HomeLink";
 
+// CSSインポート
+import styles from "../styles/common.module.css";
+
 type sexType = "male" | "female";
 
 export default function SignUp() {
@@ -76,14 +79,7 @@ export default function SignUp() {
         <title>アカウント登録</title>
       </PageHead>
       <Container component="main" maxWidth="xs">
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
+        <Box className={styles.mainContainer}>
           <Typography component="h1" variant="h5">
             アカウントを作成
           </Typography>

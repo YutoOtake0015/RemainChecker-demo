@@ -18,6 +18,9 @@ import { useRecoilValue } from "recoil";
 import userAtom from "../../../recoil/atom/userAtoms";
 import ProtectRoute from "../../../components/ProtectRoute";
 
+// CSSインポート
+import styles from "../../styles/persons/createStyle.module.css";
+
 type sexType = "male" | "female";
 
 const CreatePersonData = () => {
@@ -76,14 +79,7 @@ const CreatePersonData = () => {
           <title>余命登録</title>
         </PageHead>
         <Container component="main" maxWidth="xs">
-          <Box
-            sx={{
-              marginTop: 8,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
+          <Box className={styles.mainContainer}>
             <Typography component="h1" variant="h5">
               余命を登録しましょう
             </Typography>

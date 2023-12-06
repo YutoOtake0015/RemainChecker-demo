@@ -10,6 +10,9 @@ import { useAuth } from "../context/auth";
 import PageHead from "../../components/PageHead";
 import HomeLink from "../../components/HomeLink";
 
+// CSSインポート
+import styles from "../styles/common.module.css";
+
 export default function SignIn() {
   // アカウント情報
   const [email, setEmail] = useState<string>();
@@ -69,14 +72,7 @@ export default function SignIn() {
         <title>ログイン</title>
       </PageHead>
       <Container component="main" maxWidth="xs">
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
+        <Box className={styles.mainContainer}>
           <Typography component="h1" variant="h5">
             アカウントにログイン
           </Typography>
