@@ -15,6 +15,9 @@ import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
 import userAtom from "../recoil/atom/userAtoms";
 
+// CSSインポート
+import styles from "../src/styles/components/NavbarStyle.module.css";
+
 type navType = {
   text: string;
   url: string;
@@ -44,18 +47,13 @@ const Navbar = () => {
         sx={{ backgroundColor: "gray" }}
       >
         <Container maxWidth="md">
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
+          <Box className={styles.headerContainer}>
             <Box>
               {user && (
                 <Typography component="h1">
                   <Link
-                    style={{ color: "white", textDecoration: "none" }}
+                    className={styles.topPageLink}
+                    sx={{ color: "white", textDecoration: " none" }}
                     href="/"
                   >
                     あなたの余命
@@ -63,18 +61,13 @@ const Navbar = () => {
                 </Typography>
               )}
             </Box>
-            <List
-              component="nav"
-              sx={{ display: "flex", justifyContent: "flex-start" }}
-            >
+            <List component="nav" className={styles.listGroup}>
               {!user ? (
                 <>
                   {navLinks.map((navLink) => (
                     <ListItem disablePadding key={navLink.url}>
                       <ListItemButton
-                        sx={{
-                          whiteSpace: "nowrap",
-                        }}
+                        className={styles.listDisplay}
                         href={navLink.url}
                       >
                         <ListItemText primary={navLink.text} />
@@ -85,12 +78,12 @@ const Navbar = () => {
               ) : (
                 <ListItem disablePadding>
                   <ListItemButton
-                    sx={{ whiteSpace: "nowrap" }}
+                    className={styles.listDisplay}
                     onClick={handleSignout}
                   >
                     <ListItemText primary={`サインアウト`} />
                   </ListItemButton>
-                  <ListItemButton sx={{ whiteSpace: "nowrap" }} href="/mypage">
+                  <ListItemButton className={styles.listDisplay} href="/mypage">
                     <ListItemText primary={`ユーザ設定`} />
                   </ListItemButton>
                 </ListItem>

@@ -1,0 +1,12 @@
+.mainContainer {
+  margin-top: 4rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.optionContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

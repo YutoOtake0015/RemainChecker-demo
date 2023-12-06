@@ -17,6 +17,9 @@ import userAtom from "../../../recoil/atom/userAtoms";
 import { useRouter } from "next/router";
 import ProtectRoute from "../../../components/ProtectRoute";
 
+// CSSインポート
+import styles from "../../styles/persons/indexStyle.module.css";
+
 type personData = {
   id: number;
   name: string;

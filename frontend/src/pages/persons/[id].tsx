@@ -18,6 +18,9 @@ import { useRecoilValue } from "recoil";
 import userAtom from "../../../recoil/atom/userAtoms";
 import { useAuth } from "../../context/auth";
 
+// CSSインポート
+import styles from "../../styles/persons/personStyle.module.css";
+
 type sexType = "male" | "female";
 
 // サーバーサイドでのCookieの取得
@@ -161,14 +164,7 @@ const PersonPage = ({ person }) => {
             <title>情報編集</title>
           </PageHead>
           <Container component="main" maxWidth="xs">
-            <Box
-              sx={{
-                marginTop: 8,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
+            <Box className={styles.mainContainer}>
               <Typography component="h1" variant="h5">
                 情報編集
               </Typography>

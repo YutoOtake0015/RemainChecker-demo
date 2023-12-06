@@ -6,10 +6,8 @@ import {
   MenuItem,
   Modal,
   Select,
-  SelectChangeEvent,
   Typography,
 } from "@mui/material";
-import { styled } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
 import RemainingLife from "../../components/RemainingLife";
 import { format, differenceInYears } from "date-fns";
@@ -19,22 +17,10 @@ import { useRecoilValue } from "recoil";
 import userAtom from "../../recoil/atom/userAtoms";
 import { useRouter } from "next/router";
 
+// CSSインポート
+import styles from "../styles/indexStyle.module.css";
+
 type sexType = "male" | "female";
-
-const CenteredModalContainer = styled("div")({
-  position: "fixed",
-  top: "50%",
-  left: "50%",
-});
-
-const modalStyle = {
-  transform: "translate(-50%, -50%)",
-  border: "2px solid #000",
-  boxShadow: "0px 3px 5px 2px rgba(0,0,0,0.3)",
-  padding: "1rem",
-  backgroundColor: "rgba(255, 255, 255, 0.9)", // 半透明の背景色
-  borderRadius: "10px",
-};
 
 type personType = {
   birthDate: Date;
@@ -118,131 +104,111 @@ export default function Home() {
       <PageHead>
         <title>あなたの余命</title>
       </PageHead>
-      <Container
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column",
-        }}
-      >
-        {user ? (
-          <Button
-            href="/persons"
-            variant="contained"
-            sx={{ marginTop: "1rem" }}
-          >
-            みんなの余命
-          </Button>
-        ) : (
-          <Button
-            variant="contained"
-            onClick={() => setShowModal(true)}
-            sx={{ marginTop: "1rem" }}
-          >
-            情報を設定
-          </Button>
-        )}
-        <Box sx={{ marginTop: "20px" }}>
-          {person && (
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                flexDirection: "column",
-                backgroundColor: "#f0f0f0",
-                padding: "20px",
-                borderRadius: "10px",
-              }}
+      <Container>
+        <Box className={styles.container}>
+          {user ? (
+            <Button
+              href="/persons"
+              variant="contained"
+              sx={{ marginTop: "1rem" }}
             >
-              <Box sx={{ marginBottom: "20px", textAlign: "center" }}>
+              みんなの余命
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              onClick={() => setShowModal(true)}
+              sx={{ marginTop: "1rem" }}
+            >
+              情報を設定
+            </Button>
+          )}
+          <Box className={styles.personInfo}>
+            {person && (
+              <Box className={styles.infoBox}>
                 <Typography variant="subtitle1">
-                  <Box component="span" sx={{ fontSize: "2rem" }}>
+                  <Box component="span" className={styles.infoText}>
                     {format(person.birthDate, "yyyy年MM月dd日")}
                   </Box>
                   生まれ
                 </Typography>
                 <Typography variant="h5">
-                  <Box component="span" sx={{ fontSize: "2rem" }}>
+                  <Box component="span" className={styles.infoText}>
                     {calculateAge(person.birthDate)}歳
                   </Box>
                   の{person.sex === "male" ? "男性" : "女性"}
                 </Typography>
               </Box>
-            </Box>
-          )}
-          {person && (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                marginTop: "1rem",
-              }}
-            >
-              <Typography
-                variant="subtitle1"
-                sx={{
-                  display: "flex",
-                  fontSize: "2rem",
-                  fontWeight: "bold",
-                  alignItems: "center",
-                }}
-              >
-                <HistoryToggleOffIcon
-                  sx={{ marginRight: "0.5rem", fontSize: "2.5rem" }}
-                />
-                あなたに残された時間
-              </Typography>
-              <Box sx={{ fontSize: "1.5rem" }}>
-                <RemainingLife key={remainingLifeKey} person={person} />
+            )}
+            {person && (
+              <Box className={styles.remainingLifeContainer}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "2rem",
+                    fontWeight: "bold",
+                  }}
+                >
+                  <HistoryToggleOffIcon
+                    sx={{ marginRight: "0.5rem", fontSize: "2.5rem" }}
+                  />
+                  あなたに残された時間
+                </Typography>
+                <Box className={styles.remainingLife}>
+                  <RemainingLife key={remainingLifeKey} person={person} />
+                </Box>
               </Box>
-            </Box>
+            )}
+          </Box>
+          {showModal && (
+            <>
+              <Modal open={showModal} onClose={() => setShowModal(false)}>
+                <Box className={styles.modalContainer}>
+                  <Box className={styles.modalStyle}>
+                    <Box className={styles.modalBoxBottm}>
+                      <Typography
+                        variant="h6"
+                        className={styles.modalTextBottom}
+                      >
+                        生年月日
+                      </Typography>
+                      <DatePicker
+                        value={selectBirthDate}
+                        onChange={(e: Date) => setSelectBirthDate(e as Date)}
+                        maxDate={new Date()}
+                        openTo="year"
+                        views={["year", "month", "day"]}
+                      />
+                    </Box>
+                    <Box className={styles.modalBoxBottm}>
+                      <Typography
+                        variant="h6"
+                        className={styles.modalTextBottom}
+                      >
+                        性別
+                      </Typography>
+                      <Select
+                        value={selectSex}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          setSelectSex(e.target.value as sexType)
+                        }
+                      >
+                        <MenuItem value={"male"}>男</MenuItem>
+                        <MenuItem value={"female"}>女</MenuItem>
+                      </Select>
+                    </Box>
+                    <Button variant="contained" onClick={handleSetting}>
+                      設定
+                    </Button>
+                  </Box>
+                </Box>
+              </Modal>
+            </>
           )}
         </Box>
-        {showModal && (
-          <>
-            <Modal open={showModal} onClose={() => setShowModal(false)}>
-              <CenteredModalContainer>
-                <Box sx={modalStyle}>
-                  <Box sx={{ marginBottom: "10px" }}>
-                    <Typography variant="h6" sx={{ marginBottom: "5px" }}>
-                      生年月日
-                    </Typography>
-                    <DatePicker
-                      value={selectBirthDate}
-                      onChange={(e: Date) => setSelectBirthDate(e as Date)}
-                      maxDate={new Date()}
-                      openTo="year"
-                      views={["year", "month", "day"]}
-                    />
-                  </Box>
-                  <Box sx={{ marginBottom: "10px" }}>
-                    <Typography variant="h6" sx={{ marginBottom: "5px" }}>
-                      性別
-                    </Typography>
-                    <Select
-                      value={selectSex}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setSelectSex(e.target.value as sexType)
-                      }
-                    >
-                      <MenuItem value={"male"}>男</MenuItem>
-                      <MenuItem value={"female"}>女</MenuItem>
-                    </Select>
-                  </Box>
-                  <Button
-                    variant="contained"
-                    onClick={handleSetting}
-                    sx={{ marginTop: "10px" }}
-                  >
-                    設定
-                  </Button>
-                </Box>
-              </CenteredModalContainer>
-            </Modal>
-          </>
-        )}
       </Container>
     </>
   );

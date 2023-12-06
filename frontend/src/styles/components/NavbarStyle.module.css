@@ -1,0 +1,19 @@
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.listGroup {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.listDisplay {
+  white-space: nowrap;
+}
+
+.topPageLink {
+  color: white;
+  text-decoration: none;
+}
