@@ -3,8 +3,8 @@ import {
   Box,
   Button,
   Container,
+  Grid,
   MenuItem,
-  Modal,
   Select,
   Typography,
 } from "@mui/material";
@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 
 // CSSインポート
 import styles from "../styles/indexStyle.module.css";
+import Link from "next/link";
 
 type sexType = "male" | "female";
 
@@ -34,7 +35,6 @@ export default function Home() {
   const [person, setPerson] = useState<personType>(null);
   const [selectBirthDate, setSelectBirthDate] = useState<Date | null>(null);
   const [selectSex, setSelectSex] = useState<sexType | "">("");
-  const [showModal, setShowModal] = useState(false);
   const [remainingLifeKey, setRemainingLifeKey] = useState<number>(0);
 
   const calculateAge = (birthDate: Date) => {
@@ -42,7 +42,8 @@ export default function Home() {
     return differenceInYears(currentDate, birthDate);
   };
 
-  const handleSetting = async () => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     try {
       if (!selectBirthDate || !selectSex) {
         return alert("情報を設定してください");
@@ -79,13 +80,19 @@ export default function Home() {
       // 初期化
       setSelectBirthDate(null);
       setSelectSex("");
-      setShowModal(false);
 
       // 再作成したRemainingLifeコンポーネントのkeyを更新
       setRemainingLifeKey((prevKey) => prevKey + 1);
     } catch (err) {
       router.push("/");
     }
+  };
+
+  const handleReset = () => {
+    setSelectBirthDate(null);
+    setSelectSex("");
+    setPerson(null);
+    setRemainingLifeKey(0);
   };
 
   useEffect(() => {
@@ -106,25 +113,35 @@ export default function Home() {
       </PageHead>
       <Container>
         <Box className={styles.container}>
-          {user ? (
-            <Button
-              href="/persons"
-              variant="contained"
-              sx={{ marginTop: "1rem" }}
-            >
-              みんなの余命
-            </Button>
-          ) : (
-            <Button
-              variant="contained"
-              onClick={() => setShowModal(true)}
-              sx={{ marginTop: "1rem 0" }}
-            >
-              情報を設定
-            </Button>
+          {user && (
+            <>
+              <Button
+                href="/persons"
+                variant="contained"
+                sx={{ margin: "1rem 0" }}
+              >
+                みんなの余命
+              </Button>
+            </>
           )}
-          <Box className={styles.personInfo}>
-            {person && (
+
+          {!user && person && (
+            <>
+              <Link href="/" passHref>
+                <Button
+                  component="a"
+                  onClick={handleReset}
+                  variant="contained"
+                  style={{ margin: "1rem 0" }}
+                >
+                  再設定
+                </Button>
+              </Link>
+            </>
+          )}
+
+          {person ? (
+            <>
               <Box className={styles.infoBox}>
                 <Typography variant="subtitle1">
                   <Box component="span" className={styles.infoText}>
@@ -139,8 +156,6 @@ export default function Home() {
                   の{person.sex === "male" ? "男性" : "女性"}
                 </Typography>
               </Box>
-            )}
-            {person && (
               <Box className={styles.remainingLifeContainer}>
                 <Typography
                   variant="subtitle1"
@@ -161,37 +176,36 @@ export default function Home() {
                   <RemainingLife key={remainingLifeKey} person={person} />
                 </Box>
               </Box>
-            )}
-          </Box>
-          {showModal && (
+            </>
+          ) : (
             <>
-              <Modal open={showModal} onClose={() => setShowModal(false)}>
-                <Box className={styles.modalContainer}>
-                  <Box className={styles.modalStyle}>
-                    <Box className={styles.modalBoxBottm}>
-                      <Typography
-                        variant="h6"
-                        className={styles.modalTextBottom}
-                      >
-                        生年月日
-                      </Typography>
+              <Box className={styles.settingContainer}>
+                <Typography component="h1" variant="h5">
+                  情報を設定して余命を表示しましょう
+                </Typography>
+                <Box
+                  component="form"
+                  noValidate
+                  onSubmit={handleSubmit}
+                  sx={{ mt: 3 }}
+                >
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={8}>
                       <DatePicker
-                        value={selectBirthDate}
+                        label="生年月日"
                         onChange={(e: Date) => setSelectBirthDate(e as Date)}
+                        value={selectBirthDate}
                         maxDate={new Date()}
                         openTo="year"
                         views={["year", "month", "day"]}
                       />
-                    </Box>
-                    <Box className={styles.modalBoxBottm}>
-                      <Typography
-                        variant="h6"
-                        className={styles.modalTextBottom}
-                      >
-                        性別
-                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
                       <Select
                         value={selectSex}
+                        required
+                        label="性別"
+                        fullWidth
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                           setSelectSex(e.target.value as sexType)
                         }
@@ -199,13 +213,19 @@ export default function Home() {
                         <MenuItem value={"male"}>男</MenuItem>
                         <MenuItem value={"female"}>女</MenuItem>
                       </Select>
-                    </Box>
-                    <Button variant="contained" onClick={handleSetting}>
-                      設定
-                    </Button>
-                  </Box>
+                    </Grid>
+                  </Grid>
+
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                  >
+                    設定
+                  </Button>
                 </Box>
-              </Modal>
+              </Box>
             </>
           )}
         </Box>
