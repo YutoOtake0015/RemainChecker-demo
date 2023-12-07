@@ -4,10 +4,6 @@
   flex-direction: column;
 }
 
-.button {
-  margin-top: 1rem;
-}
-
 .personInfo {
   display: flex;
   align-items: center;

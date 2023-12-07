@@ -118,7 +118,7 @@ export default function Home() {
             <Button
               variant="contained"
               onClick={() => setShowModal(true)}
-              sx={{ marginTop: "1rem" }}
+              sx={{ marginTop: "1rem 0" }}
             >
               情報を設定
             </Button>

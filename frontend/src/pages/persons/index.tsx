@@ -14,11 +14,7 @@ import BackLink from "../../../components/BackLink";
 import PageHead from "../../../components/PageHead";
 import { useRecoilValue } from "recoil";
 import userAtom from "../../../recoil/atom/userAtoms";
-import { useRouter } from "next/router";
 import ProtectRoute from "../../../components/ProtectRoute";
-
-// CSSインポート
-import styles from "../../styles/persons/indexStyle.module.css";
 
 type personData = {
   id: number;
@@ -32,8 +28,6 @@ type personData = {
 const Persons = () => {
   const [persons, setPersons] = useState<personData[]>();
   const user = useRecoilValue(userAtom);
-
-  const router = useRouter();
 
   useEffect(() => {
     const setPersonData = async () => {
@@ -117,15 +111,15 @@ const Persons = () => {
           <title>余命一覧</title>
         </PageHead>
         {persons && (
-          <Container>
-            <Button
-              href="/persons/create"
-              variant="contained"
-              sx={{ marginTop: "1rem" }}
-            >
-              新規登録
-            </Button>
+          <Container maxWidth="md">
             <Box>
+              <Button
+                href="/persons/create"
+                variant="contained"
+                sx={{ margin: "1rem 0" }}
+              >
+                新規登録
+              </Button>
               <DataGrid
                 columns={cols}
                 rows={persons}
