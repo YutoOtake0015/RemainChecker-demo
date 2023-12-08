@@ -25,6 +25,7 @@
     "react-router-dom": "^6.20.1",
     "react-spinners": "^0.13.8",
     "recoil": "^0.7.7",
+    "sharp": "^0.33.0",
     "styled-components": "^6.1.0"
   },
   "devDependencies": {

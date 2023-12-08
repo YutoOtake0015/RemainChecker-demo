@@ -10,9 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { useAuth } from "../src/context/auth";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import { useRecoilValue } from "recoil";
+import { useAuth } from "../src/context/auth";
 import userAtom from "../recoil/atom/userAtoms";
 
 // CSSインポート
@@ -48,19 +49,16 @@ const Navbar = () => {
       >
         <Container maxWidth="md">
           <Box className={styles.headerContainer}>
-            <Box>
-              {user && (
-                <Typography component="h1">
-                  <Link
-                    className={styles.topPageLink}
-                    sx={{ color: "white", textDecoration: " none" }}
-                    href="/"
-                  >
-                    あなたの余命
-                  </Link>
-                </Typography>
-              )}
-            </Box>
+            <Typography component="h1">
+              <Link href="/">
+                <Image
+                  src="/logo.png"
+                  width={180}
+                  height={40}
+                  alt="RemainChecker"
+                />
+              </Link>
+            </Typography>
             <List component="nav" className={styles.listGroup}>
               {!user ? (
                 <>
