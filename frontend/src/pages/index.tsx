@@ -118,7 +118,13 @@ export default function Home() {
               <Button
                 href="/persons"
                 variant="contained"
-                sx={{ margin: "1rem 0" }}
+                sx={{
+                  mt: 3,
+                  mb: 2,
+                  backgroundColor: "#1565C0",
+                  color: "#FFFFFF",
+                  margin: "1rem 0",
+                }}
               >
                 みんなの余命
               </Button>
@@ -133,6 +139,13 @@ export default function Home() {
                   onClick={handleReset}
                   variant="contained"
                   style={{ margin: "1rem 0" }}
+                  sx={{
+                    mt: 3,
+                    mb: 2,
+                    backgroundColor: "#1565C0",
+                    color: "#FFFFFF",
+                    margin: "1rem 0",
+                  }}
                 >
                   再設定
                 </Button>
@@ -220,7 +233,12 @@ export default function Home() {
                     type="submit"
                     fullWidth
                     variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
+                    sx={{
+                      mt: 3,
+                      mb: 2,
+                      backgroundColor: "#1565C0",
+                      color: "#FFFFFF",
+                    }}
                   >
                     設定
                   </Button>

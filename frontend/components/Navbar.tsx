@@ -45,7 +45,7 @@ const Navbar = () => {
       <AppBar
         component="header"
         position="static"
-        sx={{ backgroundColor: "gray" }}
+        sx={{ backgroundColor: "#87CEEB" }}
       >
         <Container maxWidth="md">
           <Box className={styles.headerContainer}>
@@ -65,7 +65,7 @@ const Navbar = () => {
                   {navLinks.map((navLink) => (
                     <ListItem disablePadding key={navLink.url}>
                       <ListItemButton
-                        className={styles.listDisplay}
+                        sx={{ whiteSpace: "nowrap", color: "#333333" }}
                         href={navLink.url}
                       >
                         <ListItemText primary={navLink.text} />
@@ -76,12 +76,15 @@ const Navbar = () => {
               ) : (
                 <ListItem disablePadding>
                   <ListItemButton
-                    className={styles.listDisplay}
+                    sx={{ whiteSpace: "nowrap", color: "#333333" }}
                     onClick={handleSignout}
                   >
                     <ListItemText primary={`サインアウト`} />
                   </ListItemButton>
-                  <ListItemButton className={styles.listDisplay} href="/mypage">
+                  <ListItemButton
+                    sx={{ whiteSpace: "nowrap", color: "#333333" }}
+                    href="/mypage"
+                  >
                     <ListItemText primary={`ユーザ設定`} />
                   </ListItemButton>
                 </ListItem>
