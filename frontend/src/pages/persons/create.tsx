@@ -143,7 +143,12 @@ const CreatePersonData = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{
+                  mt: 3,
+                  mb: 2,
+                  backgroundColor: "#1565C0",
+                  color: "#FFFFFF",
+                }}
               >
                 登録
               </Button>

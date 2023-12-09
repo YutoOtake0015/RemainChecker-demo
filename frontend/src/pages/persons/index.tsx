@@ -116,7 +116,11 @@ const Persons = () => {
               <Button
                 href="/persons/create"
                 variant="contained"
-                sx={{ margin: "1rem 0" }}
+                sx={{
+                  margin: "1rem 0",
+                  backgroundColor: "#1565C0",
+                  color: "#FFFFFF",
+                }}
               >
                 新規登録
               </Button>
@@ -132,10 +136,10 @@ const Persons = () => {
                 }}
                 sx={{
                   "& .user-row": {
-                    background: "#00FFFF !important",
+                    background: "#aee7ff !important",
                   },
                 }}
-                // 特定の条件でclassを返す
+                // ユーザ情報の場合、背景色で強調表示
                 getRowClassName={(params: GridRowParams) => {
                   if (params.row.isAccountUser) {
                     return "user-row";
