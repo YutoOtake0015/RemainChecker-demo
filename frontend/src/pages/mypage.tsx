@@ -172,7 +172,7 @@ const MyPage = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3, mb: 2, color: "#FFFFFF" }}
               >
                 変更
               </Button>
