@@ -224,6 +224,7 @@ export default function Home() {
                     </Grid>
                     <Grid item xs={12} sm={4}>
                       <FormControl fullWidth>
+                        <InputLabel htmlFor="gender">性別</InputLabel>
                         <Select
                           value={selectSex}
                           required
