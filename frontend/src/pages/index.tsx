@@ -3,7 +3,9 @@ import {
   Box,
   Button,
   Container,
+  FormControl,
   Grid,
+  InputLabel,
   MenuItem,
   Select,
   Typography,
@@ -178,6 +180,11 @@ export default function Home() {
                     justifyContent: "center",
                     fontSize: "2rem",
                     fontWeight: "bold",
+                    // widthが600px以下でアイコンとテキストを縦表示
+                    "@media screen and (max-width:600px)": {
+                      display: "flex",
+                      flexDirection: "column",
+                    },
                   }}
                 >
                   <HistoryToggleOffIcon
@@ -203,29 +210,32 @@ export default function Home() {
                   sx={{ mt: 3 }}
                 >
                   <Grid container spacing={2}>
-                    <Grid item xs={12} sm={8}>
-                      <DatePicker
-                        label="生年月日"
-                        onChange={(e: Date) => setSelectBirthDate(e as Date)}
-                        value={selectBirthDate}
-                        maxDate={new Date()}
-                        openTo="year"
-                        views={["year", "month", "day"]}
-                      />
+                    <Grid item xs={12} sm={8} sx={{ margin: "auto" }}>
+                      <FormControl fullWidth>
+                        <DatePicker
+                          label="生年月日"
+                          onChange={(e: Date) => setSelectBirthDate(e as Date)}
+                          value={selectBirthDate}
+                          maxDate={new Date()}
+                          openTo="year"
+                          views={["year", "month", "day"]}
+                        />
+                      </FormControl>
                     </Grid>
                     <Grid item xs={12} sm={4}>
-                      <Select
-                        value={selectSex}
-                        required
-                        label="性別"
-                        fullWidth
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          setSelectSex(e.target.value as sexType)
-                        }
-                      >
-                        <MenuItem value={"male"}>男</MenuItem>
-                        <MenuItem value={"female"}>女</MenuItem>
-                      </Select>
+                      <FormControl fullWidth>
+                        <Select
+                          value={selectSex}
+                          required
+                          label="性別"
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            setSelectSex(e.target.value as sexType)
+                          }
+                        >
+                          <MenuItem value={"male"}>男</MenuItem>
+                          <MenuItem value={"female"}>女</MenuItem>
+                        </Select>
+                      </FormControl>
                     </Grid>
                   </Grid>
 

@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Container,
+  FormControl,
   Grid,
   MenuItem,
   Select,
@@ -100,43 +101,49 @@ const CreatePersonData = () => {
             >
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <TextField
-                    autoComplete="given-name"
-                    name="name"
-                    required
-                    fullWidth
-                    id="name"
-                    label="名前"
-                    autoFocus
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setPersonName(e.target.value)
-                    }
-                  />
+                  <FormControl fullWidth>
+                    <TextField
+                      autoComplete="given-name"
+                      name="name"
+                      required
+                      fullWidth
+                      id="name"
+                      label="名前"
+                      autoFocus
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setPersonName(e.target.value)
+                      }
+                    />
+                  </FormControl>
                 </Grid>
 
                 <Grid item xs={12} sm={8}>
-                  <DatePicker
-                    label="生年月日"
-                    onChange={(e: Date) => setBirthDate(e as Date)}
-                    value={birthDate}
-                    maxDate={new Date()}
-                    openTo="year"
-                    views={["year", "month", "day"]}
-                  />
+                  <FormControl fullWidth>
+                    <DatePicker
+                      label="生年月日"
+                      onChange={(e: Date) => setBirthDate(e as Date)}
+                      value={birthDate}
+                      maxDate={new Date()}
+                      openTo="year"
+                      views={["year", "month", "day"]}
+                    />
+                  </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={4}>
-                  <Select
-                    value={sex}
-                    required
-                    label="性別"
-                    fullWidth
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setSex(e.target.value as sexType)
-                    }
-                  >
-                    <MenuItem value={"male"}>男</MenuItem>
-                    <MenuItem value={"female"}>女</MenuItem>
-                  </Select>
+                  <FormControl fullWidth>
+                    <Select
+                      value={sex}
+                      required
+                      label="性別"
+                      fullWidth
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setSex(e.target.value as sexType)
+                      }
+                    >
+                      <MenuItem value={"male"}>男</MenuItem>
+                      <MenuItem value={"female"}>女</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid>
               </Grid>
               <Button

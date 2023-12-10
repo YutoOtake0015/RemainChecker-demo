@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { MenuItem, Select } from "@mui/material";
+import { FormControl, MenuItem, Select } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import PageHead from "../../components/PageHead";
 import HomeLink from "../../components/HomeLink";
@@ -100,85 +100,95 @@ export default function SignUp() {
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
-                  autoComplete="given-name"
-                  name="name"
-                  required
-                  fullWidth
-                  id="name"
-                  label="名前"
-                  autoFocus
-                  value={username}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setUserName(e.target.value)
-                  }
-                />
+                <FormControl fullWidth>
+                  <TextField
+                    autoComplete="given-name"
+                    name="name"
+                    required
+                    fullWidth
+                    id="name"
+                    label="名前"
+                    autoFocus
+                    value={username}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setUserName(e.target.value)
+                    }
+                  />
+                </FormControl>
               </Grid>
 
               <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="メールアドレス"
-                  name="email"
-                  autoComplete="email"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setEmail(e.target.value)
-                  }
-                  inputProps={{
-                    onKeyPress: (e) => {
-                      if (e.key === " ") {
-                        e.preventDefault();
-                      }
-                    },
-                  }}
-                />
+                <FormControl fullWidth>
+                  <TextField
+                    required
+                    fullWidth
+                    id="email"
+                    label="メールアドレス"
+                    name="email"
+                    autoComplete="email"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setEmail(e.target.value)
+                    }
+                    inputProps={{
+                      onKeyPress: (e) => {
+                        if (e.key === " ") {
+                          e.preventDefault();
+                        }
+                      },
+                    }}
+                  />
+                </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="パスワード"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setPassword(e.target.value)
-                  }
-                  inputProps={{
-                    onKeyPress: (e) => {
-                      if (e.key === " ") {
-                        e.preventDefault();
-                      }
-                    },
-                  }}
-                />
+                <FormControl fullWidth>
+                  <TextField
+                    required
+                    fullWidth
+                    name="password"
+                    label="パスワード"
+                    type="password"
+                    id="password"
+                    autoComplete="new-password"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setPassword(e.target.value)
+                    }
+                    inputProps={{
+                      onKeyPress: (e) => {
+                        if (e.key === " ") {
+                          e.preventDefault();
+                        }
+                      },
+                    }}
+                  />
+                </FormControl>
               </Grid>
               <Grid item xs={12} sm={8}>
-                <DatePicker
-                  label="生年月日"
-                  onChange={(e: Date) => setBirthDate(e as Date)}
-                  value={birthDate}
-                  maxDate={new Date()}
-                  openTo="year"
-                  views={["year", "month", "day"]}
-                />
+                <FormControl fullWidth>
+                  <DatePicker
+                    label="生年月日"
+                    onChange={(e: Date) => setBirthDate(e as Date)}
+                    value={birthDate}
+                    maxDate={new Date()}
+                    openTo="year"
+                    views={["year", "month", "day"]}
+                  />
+                </FormControl>
               </Grid>
               <Grid item xs={12} sm={4}>
-                <Select
-                  value={sex}
-                  required
-                  label="性別"
-                  fullWidth
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setSex(e.target.value as sexType)
-                  }
-                >
-                  <MenuItem value={"male"}>男</MenuItem>
-                  <MenuItem value={"female"}>女</MenuItem>
-                </Select>
+                <FormControl fullWidth>
+                  <Select
+                    value={sex}
+                    required
+                    label="性別"
+                    fullWidth
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setSex(e.target.value as sexType)
+                    }
+                  >
+                    <MenuItem value={"male"}>男</MenuItem>
+                    <MenuItem value={"female"}>女</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
             <Button

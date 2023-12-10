@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Container,
+  FormControl,
   Grid,
   TextField,
   Typography,
@@ -140,32 +141,36 @@ const MyPage = () => {
             >
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="email"
-                    label="メールアドレス"
-                    name="email"
-                    autoComplete="email"
-                    value={email}
-                    InputLabelProps={{
-                      shrink: !!email,
-                    }}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
+                  <FormControl fullWidth>
+                    <TextField
+                      required
+                      fullWidth
+                      id="email"
+                      label="メールアドレス"
+                      name="email"
+                      autoComplete="email"
+                      value={email}
+                      InputLabelProps={{
+                        shrink: !!email,
+                      }}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="password"
-                    label="パスワード"
-                    type="password"
-                    id="password"
-                    autoComplete="new-password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
+                  <FormControl fullWidth>
+                    <TextField
+                      required
+                      fullWidth
+                      name="password"
+                      label="パスワード"
+                      type="password"
+                      id="password"
+                      autoComplete="new-password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </FormControl>
                 </Grid>
               </Grid>
               <Button
