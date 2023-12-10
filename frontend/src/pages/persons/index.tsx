@@ -52,6 +52,23 @@ const Persons = () => {
     return formattedDate;
   };
 
+  function handleGridSort(sortColumn, sortDirection) {
+    const sortedRows = [...persons];
+
+    sortedRows.sort((a, b) => {
+      if (sortDirection === "ASC") {
+        return a[sortColumn] > b[sortColumn] ? 1 : -1;
+      } else if (sortDirection === "DESC") {
+        return a[sortColumn] < b[sortColumn] ? 1 : -1;
+      } else {
+        return 0;
+      }
+    });
+
+    // 更新された配列を設定
+    setPersons(sortedRows);
+  }
+
   // 表のカラム設定
   const cols: GridColDef[] = [
     {
@@ -129,6 +146,7 @@ const Persons = () => {
                 rows={persons}
                 density="compact"
                 autoHeight
+                disableColumnMenu
                 initialState={{
                   pagination: {
                     paginationModel: { pageSize: 10, page: 0 },
@@ -146,6 +164,7 @@ const Persons = () => {
                   }
                   return "";
                 }}
+                onColumnHeaderClick={handleGridSort}
               />
             </Box>
             <BackLink />
