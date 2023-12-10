@@ -85,7 +85,7 @@ const Persons = () => {
     {
       field: "sex",
       headerName: "性別",
-      width: 50,
+      width: 80,
       renderCell: (params: GridRenderCellParams<any>) => {
         // 表示するsexをmale/femaleから男/女に変換
         const formattedSex = params.row.sex === "male" ? "男" : "女";
