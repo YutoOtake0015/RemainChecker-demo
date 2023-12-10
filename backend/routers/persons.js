@@ -3,6 +3,7 @@ const { PrismaClient } = require("@prisma/client");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const createPersonSchema = require("../validators/createPersonSchema");
 const editPersonSchema = require("../validators/editPersonSchema");
+const getRemainTimeForSeconds = require("../functions/getRemainTimeForSecond");
 
 const prisma = new PrismaClient();
 
@@ -35,13 +36,23 @@ router.get("/findAll", isAuthenticated, async (req, res) => {
     });
 
     // クライアントで表示するプロパティを作成
-    const formattedPersons = persons.map((person) => ({
-      id: person.id,
-      name: person.personName,
-      sex: person.sex,
-      birthDate: person.birthDate,
-      isAccountUser: person.isAccountUser,
-    }));
+    const formattedPersons = await Promise.all(
+      persons.map(async (person) => {
+        const remainTime = await getRemainTimeForSeconds(
+          person.sex,
+          person.birthDate,
+        );
+
+        return {
+          id: person.id,
+          name: person.personName,
+          sex: person.sex,
+          birthDate: person.birthDate,
+          isAccountUser: person.isAccountUser,
+          remainTime,
+        };
+      }),
+    );
 
     res.status(200).json({ formattedPersons });
   } catch (err) {
