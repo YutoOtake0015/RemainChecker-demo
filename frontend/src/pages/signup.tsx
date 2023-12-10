@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { FormControl, MenuItem, Select } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import PageHead from "../../components/PageHead";
 import HomeLink from "../../components/HomeLink";
@@ -176,6 +176,7 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12} sm={4}>
                 <FormControl fullWidth>
+                  <InputLabel htmlFor="gender">性別</InputLabel>
                   <Select
                     value={sex}
                     required
