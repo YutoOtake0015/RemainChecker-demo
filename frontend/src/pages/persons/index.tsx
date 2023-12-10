@@ -3,10 +3,11 @@ import {
   GridColDef,
   GridRenderCellParams,
   GridRowParams,
+  GridSortModel,
 } from "@mui/x-data-grid";
 import { Box, Button, Container } from "@mui/material";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import apiClient from "../../lib/apiClient";
 import RemainingLife from "../../../components/RemainingLife";
 import { format } from "date-fns";
@@ -23,11 +24,13 @@ type personData = {
   birthDate: string;
   remainingLife: number;
   isAccountUser: boolean;
+  remainTime: number;
 };
 
 const Persons = () => {
   const [persons, setPersons] = useState<personData[]>();
   const user = useRecoilValue(userAtom);
+  const [sortModel, setSortModel] = useState<GridSortModel>([]);
 
   useEffect(() => {
     const setPersonData = async () => {
@@ -52,22 +55,20 @@ const Persons = () => {
     return formattedDate;
   };
 
-  function handleGridSort(sortColumn, sortDirection) {
-    const sortedRows = [...persons];
-
-    sortedRows.sort((a, b) => {
-      if (sortDirection === "ASC") {
-        return a[sortColumn] > b[sortColumn] ? 1 : -1;
-      } else if (sortDirection === "DESC") {
-        return a[sortColumn] < b[sortColumn] ? 1 : -1;
-      } else {
-        return 0;
-      }
-    });
-
-    // 更新された配列を設定
-    setPersons(sortedRows);
-  }
+  const handleSortModelChange = (model: GridSortModel) => {
+    if (model[0]?.field === "remainingLife" && persons) {
+      // remainingLife列に基づいてソートする処理
+      const sortedPersons = [...persons].sort((a, b) => {
+        if (model[0].sort === "asc") {
+          return a.remainTime - b.remainTime;
+        } else {
+          return b.remainTime - a.remainTime;
+        }
+      });
+      setPersons(sortedPersons);
+    }
+    setSortModel(model);
+  };
 
   // 表のカラム設定
   const cols: GridColDef[] = [
@@ -99,9 +100,9 @@ const Persons = () => {
       width: 200,
       flex: 0.3,
       renderCell: (params: GridRenderCellParams<any>) => (
-        // RemainingLifeコンポーネントにpersonを渡す
         <RemainingLife person={{ ...params.row }} />
       ),
+      // sortComparator: customSortComparator,
     },
     {
       field: "show",
@@ -164,7 +165,8 @@ const Persons = () => {
                   }
                   return "";
                 }}
-                onColumnHeaderClick={handleGridSort}
+                sortModel={sortModel}
+                onSortModelChange={handleSortModelChange}
               />
             </Box>
             <BackLink />
