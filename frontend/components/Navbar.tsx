@@ -108,18 +108,20 @@ const Navbar = () => {
                 disablePadding
                 sx={{ display: { xs: "none", md: "block" } }}
               >
-                <ListItemButton
-                  sx={{ whiteSpace: "nowrap", color: "#333333" }}
-                  onClick={handleSignout}
-                >
-                  <ListItemText primary={`サインアウト`} />
-                </ListItemButton>
-                <ListItemButton
-                  sx={{ whiteSpace: "nowrap", color: "#333333" }}
-                  href="/mypage"
-                >
-                  <ListItemText primary={`ユーザ設定`} />
-                </ListItemButton>
+                <div style={{ display: "flex" }}>
+                  <ListItemButton
+                    sx={{ whiteSpace: "nowrap", color: "#333333" }}
+                    onClick={handleSignout}
+                  >
+                    <ListItemText primary={`サインアウト`} />
+                  </ListItemButton>
+                  <ListItemButton
+                    sx={{ whiteSpace: "nowrap", color: "#333333" }}
+                    href="/mypage"
+                  >
+                    <ListItemText primary={`ユーザ設定`} />
+                  </ListItemButton>
+                </div>
               </ListItem>
             )}
           </List>
