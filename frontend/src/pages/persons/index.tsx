@@ -57,7 +57,7 @@ const Persons = () => {
 
   const handleSortModelChange = (model: GridSortModel) => {
     if (model[0]?.field === "remainingLife" && persons) {
-      // remainingLife列に基づいてソートする処理
+      // remainingLife列に基づいてソートする
       const sortedPersons = [...persons].sort((a, b) => {
         if (model[0].sort === "asc") {
           return a.remainTime - b.remainTime;
@@ -102,7 +102,6 @@ const Persons = () => {
       renderCell: (params: GridRenderCellParams<any>) => (
         <RemainingLife person={{ ...params.row }} />
       ),
-      // sortComparator: customSortComparator,
     },
     {
       field: "show",
