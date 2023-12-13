@@ -22,7 +22,6 @@ type personData = {
   name: string;
   sex: string;
   birthDate: string;
-  remainingLife: number;
   isAccountUser: boolean;
   remainTime: number;
 };
@@ -100,7 +99,10 @@ const Persons = () => {
       width: 200,
       flex: 0.3,
       renderCell: (params: GridRenderCellParams<any>) => (
-        <RemainingLife person={{ ...params.row }} />
+        // <RemainingLife person={person:{sex: ...params.row.sex,birthDate: ...params.row.birthDate} } />
+        <RemainingLife
+          person={{ sex: params.row.sex, birthDate: params.row.birthDate }}
+        />
       ),
     },
     {
