@@ -28,6 +28,11 @@ type navType = {
   url: string;
 };
 
+const buttonStyle = {
+  whiteSpace: "nowrap",
+  color: "#333333",
+};
+
 const navLinks: Array<navType> = [
   { text: "サインアップ", url: "/signup" },
   { text: "ログイン", url: "/signin" },
@@ -53,6 +58,22 @@ const Navbar = () => {
   const handleSignout = () => {
     router.push("/signin");
     signout();
+    handleDrawerClose();
+  };
+
+  const handleMypage = () => {
+    router.push("/mypage");
+    handleDrawerClose();
+  };
+
+  const handleSignin = () => {
+    router.push("/signin");
+    handleDrawerClose();
+  };
+
+  const handleSignup = () => {
+    router.push("/signup");
+    handleDrawerClose();
   };
 
   return (
@@ -78,8 +99,7 @@ const Navbar = () => {
               <ListItemButton
                 onClick={handleDrawerOpen}
                 sx={{
-                  whiteSpace: "nowrap",
-                  color: "#333333",
+                  ...buttonStyle,
                   display: { xs: "block", md: "none" },
                 }}
               >
@@ -109,16 +129,10 @@ const Navbar = () => {
                 sx={{ display: { xs: "none", md: "block" } }}
               >
                 <div style={{ display: "flex" }}>
-                  <ListItemButton
-                    sx={{ whiteSpace: "nowrap", color: "#333333" }}
-                    onClick={handleSignout}
-                  >
+                  <ListItemButton sx={buttonStyle} onClick={handleSignout}>
                     <ListItemText primary={`サインアウト`} />
                   </ListItemButton>
-                  <ListItemButton
-                    sx={{ whiteSpace: "nowrap", color: "#333333" }}
-                    href="/mypage"
-                  >
+                  <ListItemButton sx={buttonStyle} href="/mypage">
                     <ListItemText primary={`ユーザ設定`} />
                   </ListItemButton>
                 </div>
@@ -139,44 +153,22 @@ const Navbar = () => {
           </Box>
           {!user ? (
             <>
-              {navLinks.map((navLink) => (
-                <ListItem
-                  disablePadding
-                  key={navLink.url}
-                  sx={{
-                    whiteSpace: "nowrap",
-                    color: "#333333",
-                    display: "block",
-                    justifyContent: "normal",
-                  }}
-                >
-                  <ListItemButton href={navLink.url}>
-                    <ListItemText primary={navLink.text} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <ListItemButton sx={buttonStyle} onClick={handleSignin}>
+                  <ListItemText primary={`ログイン`} />
+                </ListItemButton>
+                <ListItemButton sx={buttonStyle} onClick={handleSignup}>
+                  <ListItemText primary={`サインアップ`} />
+                </ListItemButton>
+              </ListItem>
             </>
           ) : (
             <>
-              <ListItem
-                disablePadding
-                sx={{
-                  whiteSpace: "nowrap",
-                  color: "#333333",
-                  display: "block",
-                  justifyContent: "normal",
-                }}
-              >
-                <ListItemButton
-                  sx={{ whiteSpace: "nowrap", color: "#333333" }}
-                  onClick={handleSignout}
-                >
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <ListItemButton sx={buttonStyle} onClick={handleSignout}>
                   <ListItemText primary={`サインアウト`} />
                 </ListItemButton>
-                <ListItemButton
-                  sx={{ whiteSpace: "nowrap", color: "#333333" }}
-                  href="/mypage"
-                >
+                <ListItemButton sx={buttonStyle} onClick={handleMypage}>
                   <ListItemText primary={`ユーザ設定`} />
                 </ListItemButton>
               </ListItem>
