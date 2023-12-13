@@ -111,7 +111,7 @@ export default function Home() {
   return (
     <>
       <PageHead>
-        <title>あなたの余命</title>
+        <title>RemainChecker</title>
       </PageHead>
       <Container>
         <Box className={styles.container}>
