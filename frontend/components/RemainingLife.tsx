@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer, useRef } from "react";
 import apiClient from "../src/lib/apiClient";
 import { Box } from "@mui/material";
 
@@ -8,15 +8,40 @@ const timeStyle = {
   textAlign: "right" as const,
 };
 
-const RemainingLife = ({ person }) => {
+// useReducerで管理する状態
+const initialState = {
+  year: undefined,
+  month: undefined,
+  day: undefined,
+  hour: undefined,
+  minute: undefined,
+  second: undefined,
+  isExceeded: false,
+};
+
+// useReducerで実行する関数
+function timerReducer(state, action) {
+  switch (action.type) {
+    case "updateTime":
+      return { ...state, ...action.payload };
+    default:
+      return state;
+  }
+}
+
+type personData = {
+  person: {
+    // id: number;
+    sex: string;
+    birthDate: Date;
+  };
+};
+
+const RemainingLife = React.memo(({ person }: personData) => {
   const router = useRouter();
-  const [year, setYear] = useState<number>();
-  const [month, setMonth] = useState<number>();
-  const [day, setDay] = useState<number>();
-  const [hour, setHour] = useState<number>();
-  const [minute, setMinute] = useState<number>();
-  const [second, setSecond] = useState<number>();
   const [isExceeded, setIsExceeded] = useState<boolean>(false);
+  const [state, dispatch] = useReducer(timerReducer, initialState);
+  const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
@@ -39,6 +64,13 @@ const RemainingLife = ({ person }) => {
     };
 
     fetchData();
+
+    // クリーンアップ関数
+    return () => {
+      if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current);
+      }
+    };
   }, [person]);
 
   const getLifeSpanForSeconds = async (sex) => {
@@ -84,16 +116,24 @@ const RemainingLife = ({ person }) => {
         const minutes = Math.floor(remainingSecondsAfterHour / secondsInMinute);
         const seconds = remainingSecondsAfterHour % secondsInMinute;
 
-        // 状態セット
-        setYear(years);
-        setMonth(months);
-        setDay(days);
-        setHour(hours);
-        setMinute(minutes);
-        setSecond(seconds);
+        // 状態を一括で更新
+        dispatch({
+          type: "updateTime",
+          payload: {
+            year: years,
+            month: months,
+            day: days,
+            hour: hours,
+            minute: minutes,
+            second: seconds,
+          },
+        });
 
         // 残り秒数を減算
         totalSeconds -= 1;
+
+        // インターバルIDをrefに保存
+        intervalIdRef.current = countdownInterval;
       } else {
         // カウントダウンが終了したらクリア
         clearInterval(countdownInterval);
@@ -101,6 +141,7 @@ const RemainingLife = ({ person }) => {
     }, 1000); // 1秒ごとに更新
   };
 
+  // 表示する値のフォーマット
   const formatNumber = (value: number): string => {
     if (!value) {
       return "00";
@@ -115,28 +156,30 @@ const RemainingLife = ({ person }) => {
       ) : (
         <Box sx={{ display: "flex", textAlign: "center" }}>
           <Box component="span" style={timeStyle}>
-            {formatNumber(year)}年
+            {formatNumber(state.year)}年
           </Box>
           <Box component="span" style={timeStyle}>
-            {formatNumber(month)}
+            {formatNumber(state.month)}
             ヵ月
           </Box>
           <Box component="span" style={timeStyle}>
-            {formatNumber(day)}日
+            {formatNumber(state.day)}日
           </Box>
           <Box component="span" style={timeStyle}>
-            {formatNumber(hour)}時間
+            {formatNumber(state.hour)}時間
           </Box>
           <Box component="span" style={timeStyle}>
-            {formatNumber(minute)}分
+            {formatNumber(state.minute)}分
           </Box>
           <Box component="span" style={timeStyle}>
-            {formatNumber(second)}秒
+            {formatNumber(state.second)}秒
           </Box>
         </Box>
       )}
     </>
   );
-};
+});
+
+RemainingLife.displayName = "RemainingLife";
 
 export default RemainingLife;
