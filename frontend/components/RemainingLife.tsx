@@ -31,7 +31,6 @@ function timerReducer(state, action) {
 
 type personData = {
   person: {
-    // id: number;
     sex: string;
     birthDate: Date;
   };

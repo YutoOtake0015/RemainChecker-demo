@@ -22,7 +22,6 @@ type personData = {
   name: string;
   sex: string;
   birthDate: string;
-  remainingLife: number;
   isAccountUser: boolean;
   remainTime: number;
 };
