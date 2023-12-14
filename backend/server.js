@@ -8,11 +8,18 @@ const personsRoute = require("./routers/persons");
 
 const app = express();
 
+// ポート番号
 const PORT = process.env.PORT || 10000;
+
+// cors設定
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true,
+};
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use("/api/life", lifeRoute);
 app.use("/api/auth", authRoute);

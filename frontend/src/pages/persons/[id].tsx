@@ -31,7 +31,6 @@ export const getServerSideProps = async ({ req, params }) => {
     const { id } = params;
 
     // req.headers.cookie からCookieを取得
-    // getServerSideProps内ではLocalStorageにアクセスできないため、Cookieを使用
     const token = req.headers.cookie
       ? req.headers.cookie.replace(
           /(?:(?:^|.*;\s*)auth_token\s*=\s*([^;]*).*$)|^.*$/,
@@ -42,7 +41,7 @@ export const getServerSideProps = async ({ req, params }) => {
     // APIリクエストを非同期で実行
     const response = await apiClient.get(`/persons/find/${id}`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        cookie: token,
       },
     });
 

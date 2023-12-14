@@ -96,7 +96,15 @@ router.post("/signin", async (req, res) => {
       expiresIn: "1d",
     });
 
-    return res.status(200).json({ token });
+    // Cookieを設定
+    res.cookie("auth_token", token, {
+      // httpOnly: true,
+      secure: true,
+      maxAge: 24 * 60 * 60,
+      path: "/",
+    });
+
+    return res.status(200).json({ message: "ログイン成功" });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
