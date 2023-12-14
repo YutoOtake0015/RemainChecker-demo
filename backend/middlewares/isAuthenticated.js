@@ -1,7 +1,13 @@
 const jwt = require("jsonwebtoken");
 
 function isAuthenticated(req, res, next) {
-  const token = req.headers.authorization?.split(" ")[1];
+  // Cookieからtokenを取得
+  const tokenCookie = req.headers.cookie || "";
+
+  // tokenCookieが'auth_token='を含む場合、分割して取得
+  const token = tokenCookie.includes("auth_token=")
+    ? tokenCookie.split("auth_token=")[1].split(";")[0]
+    : tokenCookie;
 
   // tokenの存在確認
   if (!token) {

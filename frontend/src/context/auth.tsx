@@ -8,7 +8,7 @@ import { useSetRecoilState } from "recoil";
 import userAtom from "../../recoil/atom/userAtoms";
 
 interface AuthContextType {
-  signin: (token: string) => void;
+  signin: () => void;
   signout: () => void;
 }
 
@@ -42,15 +42,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     const fetchData = async () => {
       // 認証tokenを取得
-      const token = localStorage.getItem("auth_token");
-      if (token) {
-        apiClient.defaults.headers["Authorization"] = `Bearer ${token}`;
+      const token = document.cookie;
 
+      if (Object.keys(token).length !== 0) {
         // tokenに応じたuserをセット
         try {
           const res = await apiClient.get("/users/find");
           setUser(res.data.user);
-        } catch (error) {
+        } catch (err) {
           // tokenに応じたuserを取得できない場合、認証情報に異常がある判断してサインアウトする
           alert(
             "システムとの通信が切断されました。\nログインからやり直してください。",
@@ -64,15 +63,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     fetchData();
   }, []);
 
-  const signin = async (token: string) => {
+  const signin = async () => {
     try {
-      localStorage.setItem("auth_token", token);
-      nookies.set(null, "auth_token", token, {
-        maxAge: 30 * 24 * 60 * 60,
-        path: "/",
-      });
-      apiClient.defaults.headers["Authorization"] = `Bearer ${token}`;
-
       // サインイン時、ユーザーをセット
       apiClient
         .get("/users/find")
@@ -104,9 +96,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const signout = () => {
-    localStorage.removeItem("auth_token");
     nookies.destroy(null, "auth_token");
-    delete apiClient.defaults.headers["Authorization"];
     setUser(null);
   };
 
