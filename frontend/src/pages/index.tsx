@@ -18,10 +18,10 @@ import PageHead from "../../components/PageHead";
 import { useRecoilValue } from "recoil";
 import userAtom from "../../recoil/atom/userAtoms";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 // CSSインポート
 import styles from "../styles/indexStyle.module.css";
-import Link from "next/link";
 
 type sexType = "male" | "female";
 
@@ -117,19 +117,20 @@ export default function Home() {
         <Box className={styles.container}>
           {user && (
             <>
-              <Button
-                href="/persons"
-                variant="contained"
-                sx={{
-                  mt: 3,
-                  mb: 2,
-                  backgroundColor: "#1565C0",
-                  color: "#FFFFFF",
-                  margin: "1rem 0",
-                }}
-              >
-                みんなの余命
-              </Button>
+              <Link href="/persons" passHref>
+                <Button
+                  variant="contained"
+                  sx={{
+                    mt: 3,
+                    mb: 2,
+                    backgroundColor: "#1565C0",
+                    color: "#FFFFFF",
+                    margin: "1rem 0",
+                  }}
+                >
+                  みんなの余命
+                </Button>
+              </Link>
             </>
           )}
 
