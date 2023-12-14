@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 10000;
 
 // cors設定
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: process.env.CLIENT_ORIGIN,
   credentials: true,
 };
 
