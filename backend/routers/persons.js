@@ -60,6 +60,25 @@ router.get("/findAll", isAuthenticated, async (req, res) => {
   }
 });
 
+router.get("/findAllCount", isAuthenticated, async (req, res) => {
+  try {
+    const personsCount = await prisma.person.count({
+      where: { userId: req.userId },
+    });
+
+    // すでに10件以上の登録がある場合、エラー
+    if (personsCount >= 10) {
+      return res.status(403).json({
+        message: "10件以上の登録はできません",
+      });
+    }
+
+    res.status(200).json({ personsCount });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 router.post("/create", isAuthenticated, async (req, res) => {
   try {
     // バリデーション

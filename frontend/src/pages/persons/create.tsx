@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import apiClient from "../../lib/apiClient";
 import { useRouter } from "next/router";
 import BackLink from "../../../components/BackLink";
@@ -36,6 +36,20 @@ const CreatePersonData = () => {
 
   // エラー表示
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+
+  // 登録件数を確認
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    const getPersonsCount = async () => {
+      await apiClient.get("/persons/findAllCount").catch((err) => {
+        console.log("err: ", err);
+        handleErrorResponse(err);
+        router.push("/persons");
+      });
+    };
+
+    getPersonsCount();
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -65,6 +79,10 @@ const CreatePersonData = () => {
       case 500:
         alert("サーバで問題が発生しました。\nもう一度やり直してください。");
         router.push("/persons/create");
+        break;
+      case 403:
+        console.log("通過");
+        alert(err.response.data.message);
         break;
       case 400:
         setValidationErrors(err.response.data.messages);
