@@ -98,10 +98,10 @@ router.post("/signin", async (req, res) => {
 
     // Cookieを設定
     res.cookie("auth_token", token, {
-      // httpOnly: true,
+      httpOnly: true,
       secure: true,
       sameSite: "none",
-      maxAge: 24 * 60 * 60,
+      maxAge: 365 * 24 * 60 * 60,
       path: "/",
     });
 

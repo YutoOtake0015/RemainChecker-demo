@@ -35,9 +35,6 @@ export default function SignIn() {
           password,
         })
         .then((res) => {
-          // const token = res.data.token;
-
-          // signin(token);
           signin();
           router.push("/");
         })

@@ -132,17 +132,18 @@ const Persons = () => {
         {persons && (
           <Container maxWidth="md">
             <Box>
-              <Button
-                href="/persons/create"
-                variant="contained"
-                sx={{
-                  margin: "1rem 0",
-                  backgroundColor: "#1565C0",
-                  color: "#FFFFFF",
-                }}
-              >
-                新規登録
-              </Button>
+              <Link href="/persons/create">
+                <Button
+                  variant="contained"
+                  sx={{
+                    margin: "1rem 0",
+                    backgroundColor: "#1565C0",
+                    color: "#FFFFFF",
+                  }}
+                >
+                  新規登録
+                </Button>
+              </Link>
               <DataGrid
                 columns={cols}
                 rows={persons}
