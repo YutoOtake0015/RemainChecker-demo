@@ -6,15 +6,14 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import apiClient from "../lib/apiClient";
 import { useRouter } from "next/router";
-// import { useAuth } from "../context/auth";
 import PageHead from "../../components/PageHead";
 import HomeLink from "../../components/HomeLink";
 import { useSetRecoilState } from "recoil";
 import userAtom from "../../recoil/atom/userAtoms";
-import { signin } from "../lib/authHelpers";
 
 // CSSインポート
 import styles from "../styles/common.module.css";
+import { fetchUser } from "../lib/authHelpers";
 
 export default function SignIn() {
   // アカウント情報
@@ -29,8 +28,6 @@ export default function SignIn() {
 
   const router = useRouter();
 
-  // const { signin } = useAuth();
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
@@ -40,8 +37,8 @@ export default function SignIn() {
           email,
           password,
         })
-        .then((res) => {
-          signin(setUser);
+        .then(() => {
+          fetchUser(setUser);
           router.push("/");
         })
         .catch((err) => {
