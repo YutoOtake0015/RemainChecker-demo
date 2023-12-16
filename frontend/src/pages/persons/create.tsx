@@ -1,3 +1,20 @@
+// React & Next.js
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
+// state
+import { useRecoilValue } from "recoil";
+import userAtom from "../../../recoil/atom/userAtoms";
+
+// library
+import apiClient from "../../lib/apiClient";
+
+// components
+import BackLink from "../../../components/BackLink";
+import PageHead from "../../../components/PageHead";
+import ProtectRoute from "../../../components/ProtectRoute";
+
+// MUI
 import {
   Box,
   Button,
@@ -11,16 +28,8 @@ import {
   Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import React, { useEffect, useState } from "react";
-import apiClient from "../../lib/apiClient";
-import { useRouter } from "next/router";
-import BackLink from "../../../components/BackLink";
-import PageHead from "../../../components/PageHead";
-import { useRecoilValue } from "recoil";
-import userAtom from "../../../recoil/atom/userAtoms";
-import ProtectRoute from "../../../components/ProtectRoute";
 
-// CSSインポート
+// CSS
 import styles from "../../styles/persons/createStyle.module.css";
 
 type sexType = "male" | "female";

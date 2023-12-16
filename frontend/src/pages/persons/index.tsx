@@ -1,3 +1,24 @@
+// React & Next.js
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+
+// state
+import { useRecoilValue } from "recoil";
+import userAtom from "../../../recoil/atom/userAtoms";
+
+// utility
+import { format } from "date-fns";
+
+// library
+import apiClient from "../../lib/apiClient";
+
+// components
+import RemainingLife from "../../../components/RemainingLife";
+import BackLink from "../../../components/BackLink";
+import PageHead from "../../../components/PageHead";
+import ProtectRoute from "../../../components/ProtectRoute";
+
+// MUI
 import {
   DataGrid,
   GridColDef,
@@ -6,16 +27,6 @@ import {
   GridSortModel,
 } from "@mui/x-data-grid";
 import { Box, Button, Container } from "@mui/material";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import apiClient from "../../lib/apiClient";
-import RemainingLife from "../../../components/RemainingLife";
-import { format } from "date-fns";
-import BackLink from "../../../components/BackLink";
-import PageHead from "../../../components/PageHead";
-import { useRecoilValue } from "recoil";
-import userAtom from "../../../recoil/atom/userAtoms";
-import ProtectRoute from "../../../components/ProtectRoute";
 
 type personData = {
   id: number;

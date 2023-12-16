@@ -1,4 +1,21 @@
+// React & Next.js
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
+// state
+import { useRecoilState } from "recoil";
+import userAtom from "../../recoil/atom/userAtoms";
+
+// library
+import apiClient from "../lib/apiClient";
+import { signout } from "../lib/authHelpers";
+
+// components
+import BackLink from "../../components/BackLink";
+import PageHead from "../../components/PageHead";
+import ProtectRoute from "../../components/ProtectRoute";
+
+// MUI
 import {
   Box,
   Button,
@@ -8,17 +25,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import apiClient from "../lib/apiClient";
-import { useRouter } from "next/router";
-import BackLink from "../../components/BackLink";
-import PageHead from "../../components/PageHead";
-import { useRecoilState } from "recoil";
-import userAtom from "../../recoil/atom/userAtoms";
-import ProtectRoute from "../../components/ProtectRoute";
 
-// CSSインポート
+// CSS
 import styles from "../styles/common.module.css";
-import { signout } from "../lib/authHelpers";
 
 const MyPage = () => {
   const router = useRouter();
