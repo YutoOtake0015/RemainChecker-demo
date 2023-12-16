@@ -12,15 +12,14 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import Drawer from "@mui/material/Drawer";
 import React, { useState } from "react";
-import { useRouter } from "next/router";
 import Image from "next/image";
-import { useRecoilValue } from "recoil";
-import { useAuth } from "../src/context/auth";
+import { useRecoilState } from "recoil";
 import userAtom from "../recoil/atom/userAtoms";
 import Link from "next/link";
 
 // CSSインポート
 import styles from "../src/styles/components/NavbarStyle.module.css";
+import { signout } from "../src/lib/authHelpers";
 
 const buttonStyle = {
   whiteSpace: "nowrap",
@@ -28,11 +27,8 @@ const buttonStyle = {
 };
 
 const Navbar = () => {
-  const { signout } = useAuth();
-
   const [open, setOpen] = useState<boolean>(false);
-
-  const user = useRecoilValue(userAtom);
+  const [user, setUser] = useRecoilState(userAtom);
 
   // メニューの切り替え
   const handleDrawerOpen = () => {
@@ -42,10 +38,8 @@ const Navbar = () => {
     setOpen(false);
   };
 
-  const router = useRouter();
-
   const handleSignout = () => {
-    signout();
+    signout(setUser);
     handleDrawerClose();
   };
 
