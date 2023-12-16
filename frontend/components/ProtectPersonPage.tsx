@@ -1,5 +1,3 @@
-// frontend/components/ProtectPersonPage.tsx
-
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
 
@@ -27,9 +25,6 @@ const ProtectPersonPage: React.FC<ProtectPersonPageProps> = ({
     router.push("/signin");
     return null;
   }
-
-  // ここで、userとpersonの関連性を確認し、不正なアクセスであればリダイレクト
-  // 例: user.id と person.userId が一致するかを確認する
 
   return <>{children}</>;
 };

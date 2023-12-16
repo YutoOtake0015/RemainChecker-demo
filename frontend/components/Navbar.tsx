@@ -3,12 +3,10 @@ import {
   Box,
   Container,
   IconButton,
-  Link,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
-  Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -19,24 +17,15 @@ import Image from "next/image";
 import { useRecoilValue } from "recoil";
 import { useAuth } from "../src/context/auth";
 import userAtom from "../recoil/atom/userAtoms";
+import Link from "next/link";
 
 // CSSインポート
 import styles from "../src/styles/components/NavbarStyle.module.css";
-
-type navType = {
-  text: string;
-  url: string;
-};
 
 const buttonStyle = {
   whiteSpace: "nowrap",
   color: "#333333",
 };
-
-const navLinks: Array<navType> = [
-  { text: "サインアップ", url: "/signup" },
-  { text: "ログイン", url: "/signin" },
-];
 
 const Navbar = () => {
   const { signout } = useAuth();
@@ -56,23 +45,19 @@ const Navbar = () => {
   const router = useRouter();
 
   const handleSignout = () => {
-    router.push("/signin");
     signout();
     handleDrawerClose();
   };
 
   const handleMypage = () => {
-    router.push("/mypage");
     handleDrawerClose();
   };
 
   const handleSignin = () => {
-    router.push("/signin");
     handleDrawerClose();
   };
 
   const handleSignup = () => {
-    router.push("/signup");
     handleDrawerClose();
   };
 
@@ -108,20 +93,23 @@ const Navbar = () => {
             </ListItem>
             {!user ? (
               <>
-                {navLinks.map((navLink) => (
-                  <ListItem disablePadding key={navLink.url}>
-                    <ListItemButton
-                      sx={{
-                        whiteSpace: "nowrap",
-                        color: "#333333",
-                        display: { xs: "none", md: "block" },
-                      }}
-                      href={navLink.url}
-                    >
-                      <ListItemText primary={navLink.text} />
-                    </ListItemButton>
-                  </ListItem>
-                ))}
+                <ListItem
+                  disablePadding
+                  sx={{ display: { xs: "none", md: "block" } }}
+                >
+                  <div style={{ display: "flex" }}>
+                    <Link href={`/signin`} style={{ textDecoration: "none" }}>
+                      <ListItemButton sx={buttonStyle}>
+                        <ListItemText primary={`ログイン`} />
+                      </ListItemButton>
+                    </Link>
+                    <Link href={`/signup`} style={{ textDecoration: "none" }}>
+                      <ListItemButton sx={buttonStyle}>
+                        <ListItemText primary={`サインアップ`} />
+                      </ListItemButton>
+                    </Link>
+                  </div>
+                </ListItem>
               </>
             ) : (
               <ListItem
@@ -129,12 +117,16 @@ const Navbar = () => {
                 sx={{ display: { xs: "none", md: "block" } }}
               >
                 <div style={{ display: "flex" }}>
-                  <ListItemButton sx={buttonStyle} onClick={handleSignout}>
-                    <ListItemText primary={`サインアウト`} />
-                  </ListItemButton>
-                  <ListItemButton sx={buttonStyle} href="/mypage">
-                    <ListItemText primary={`ユーザ設定`} />
-                  </ListItemButton>
+                  <Link href={`/signin`} style={{ textDecoration: "none" }}>
+                    <ListItemButton sx={buttonStyle} onClick={handleSignout}>
+                      <ListItemText primary={`サインアウト`} />
+                    </ListItemButton>
+                  </Link>
+                  <Link href={`/mypage`} style={{ textDecoration: "none" }}>
+                    <ListItemButton sx={buttonStyle}>
+                      <ListItemText primary={`ユーザ設定`} />
+                    </ListItemButton>
+                  </Link>
                 </div>
               </ListItem>
             )}
@@ -154,23 +146,33 @@ const Navbar = () => {
           {!user ? (
             <>
               <ListItem disablePadding sx={{ display: "block" }}>
-                <ListItemButton sx={buttonStyle} onClick={handleSignin}>
-                  <ListItemText primary={`ログイン`} />
-                </ListItemButton>
-                <ListItemButton sx={buttonStyle} onClick={handleSignup}>
-                  <ListItemText primary={`サインアップ`} />
-                </ListItemButton>
+                <Link href={`/signin`} style={{ textDecoration: "none" }}>
+                  <ListItemButton sx={buttonStyle} onClick={handleSignin}>
+                    <ListItemText primary={`ログイン`} />
+                  </ListItemButton>
+                </Link>
+
+                <Link href={`/signup`} style={{ textDecoration: "none" }}>
+                  <ListItemButton sx={buttonStyle} onClick={handleSignup}>
+                    <ListItemText primary={`サインアップ`} />
+                  </ListItemButton>
+                </Link>
               </ListItem>
             </>
           ) : (
             <>
               <ListItem disablePadding sx={{ display: "block" }}>
-                <ListItemButton sx={buttonStyle} onClick={handleSignout}>
-                  <ListItemText primary={`サインアウト`} />
-                </ListItemButton>
-                <ListItemButton sx={buttonStyle} onClick={handleMypage}>
-                  <ListItemText primary={`ユーザ設定`} />
-                </ListItemButton>
+                <Link href={`/signin`} style={{ textDecoration: "none" }}>
+                  <ListItemButton sx={buttonStyle} onClick={handleSignout}>
+                    <ListItemText primary={`サインアウト`} />
+                  </ListItemButton>
+                </Link>
+
+                <Link href={`/mypage`} style={{ textDecoration: "none" }}>
+                  <ListItemButton sx={buttonStyle} onClick={handleMypage}>
+                    <ListItemText primary={`ユーザ設定`} />
+                  </ListItemButton>
+                </Link>
               </ListItem>
             </>
           )}

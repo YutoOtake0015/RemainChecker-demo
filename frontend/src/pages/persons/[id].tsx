@@ -31,12 +31,7 @@ export const getServerSideProps = async ({ req, params }) => {
     const { id } = params;
 
     // req.headers.cookie からCookieを取得
-    const token = req.headers.cookie
-      ? req.headers.cookie.replace(
-          /(?:(?:^|.*;\s*)auth_token\s*=\s*([^;]*).*$)|^.*$/,
-          "$1",
-        )
-      : null;
+    const token = req.headers.cookie ? req.headers.cookie : null;
 
     // APIリクエストを非同期で実行
     const response = await apiClient.get(`/persons/find/${id}`, {
