@@ -1,6 +1,15 @@
+// React & Next.js
 import { useState } from "react";
 import { useRouter } from "next/router";
+
+// library
 import apiClient from "../lib/apiClient";
+
+// components
+import PageHead from "../../components/PageHead";
+import HomeLink from "../../components/HomeLink";
+
+// MUI
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -9,10 +18,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import PageHead from "../../components/PageHead";
-import HomeLink from "../../components/HomeLink";
 
-// CSSインポート
+// CSS
 import styles from "../styles/common.module.css";
 
 type sexType = "male" | "female";

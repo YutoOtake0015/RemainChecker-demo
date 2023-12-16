@@ -1,4 +1,20 @@
+// React & Next.js
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
+
+// state
+import { useRecoilValue } from "recoil";
+import userAtom from "../../recoil/atom/userAtoms";
+
+// utility
+import { format, differenceInYears } from "date-fns";
+
+// components
+import RemainingLife from "../../components/RemainingLife";
+import PageHead from "../../components/PageHead";
+
+// MUI
 import {
   Box,
   Button,
@@ -11,16 +27,9 @@ import {
   Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import RemainingLife from "../../components/RemainingLife";
-import { format, differenceInYears } from "date-fns";
 import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
-import PageHead from "../../components/PageHead";
-import { useRecoilValue } from "recoil";
-import userAtom from "../../recoil/atom/userAtoms";
-import { useRouter } from "next/router";
-import Link from "next/link";
 
-// CSSインポート
+// CSS
 import styles from "../styles/indexStyle.module.css";
 
 type sexType = "male" | "female";

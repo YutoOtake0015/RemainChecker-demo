@@ -1,11 +1,18 @@
+// React & Next.js
 import React, { ReactNode, useEffect, useState } from "react";
-import apiClient from "../lib/apiClient";
 import { useRouter } from "next/router";
-import { Box } from "@mui/material";
 import { ClockLoader } from "react-spinners";
+
+// state
 import { useSetRecoilState } from "recoil";
 import userAtom from "../../recoil/atom/userAtoms";
+
+// library
+import apiClient from "../lib/apiClient";
 import { signout } from "../lib/authHelpers";
+
+// MUI
+import { Box } from "@mui/material";
 
 interface AuthProviderProps {
   children: ReactNode;

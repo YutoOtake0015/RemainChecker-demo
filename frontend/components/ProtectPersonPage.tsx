@@ -1,5 +1,6 @@
-import { useRouter } from "next/router";
+// React & Next.js
 import { ReactNode } from "react";
+import { useRouter } from "next/router";
 
 type UserType = null | {
   id: number;

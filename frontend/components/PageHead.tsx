@@ -1,3 +1,4 @@
+// React & Next.js
 import Head from "next/head";
 
 const PageHead = ({ children }) => {

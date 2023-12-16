@@ -1,11 +1,20 @@
+// React & Next.js
 import type { AppProps } from "next/app";
+
+// state
+import { RecoilRoot } from "recoil";
+import { AuthProvider } from "../context/auth";
+
+// utility
+import { ja } from "date-fns/locale";
+
+// components
+import Navbar from "../../components/Navbar";
+
+// MUI
+import { CssBaseline } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { ja } from "date-fns/locale";
-import Navbar from "../../components/Navbar";
-import { AuthProvider } from "../context/auth";
-import { RecoilRoot } from "recoil";
-import { CssBaseline } from "@mui/material";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
