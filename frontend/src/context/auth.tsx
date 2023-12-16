@@ -1,35 +1,21 @@
-import React, { ReactNode, useContext, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import apiClient from "../lib/apiClient";
-import nookies from "nookies";
 import { useRouter } from "next/router";
 import { Box } from "@mui/material";
 import { ClockLoader } from "react-spinners";
 import { useSetRecoilState } from "recoil";
 import userAtom from "../../recoil/atom/userAtoms";
-
-interface AuthContextType {
-  signin: () => void;
-  signout: () => void;
-}
+import { signout } from "../lib/authHelpers";
 
 interface AuthProviderProps {
   children: ReactNode;
 }
-
-const AuthContext = React.createContext<AuthContextType>({
-  signin: () => {},
-  signout: () => {},
-});
 
 const clockStyle = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   height: "100vh",
-};
-
-export const useAuth = () => {
-  return useContext(AuthContext);
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
@@ -54,7 +40,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           alert(
             "システムとの通信が切断されました。\nログインからやり直してください。",
           );
-          token ? signout() : router.push("/");
+          token ? signout(setUser) : router.push("/");
         }
       }
       setIsLoading(false);
@@ -62,48 +48,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     fetchData();
   }, []);
-
-  const signin = async () => {
-    try {
-      // サインイン時、ユーザーをセット
-      apiClient
-        .get("/users/find")
-        .then((res) => {
-          setUser(res.data.user);
-        })
-        .catch((err) => {
-          handleErrorResponse(err);
-          signout();
-          router.push("/signin");
-        });
-    } catch (err) {
-      alert("予期しないエラーが発生しました\nもう一度やり直してください");
-      signout();
-    }
-  };
-
-  const handleErrorResponse = (err) => {
-    switch (err.response.status) {
-      case 500:
-        alert("サーバで問題が発生しました\nもう一度やり直してください");
-        break;
-      case 404:
-        alert(err.response.data.message);
-        break;
-      default:
-        alert("予期しないエラーが発生しました\nもう一度やり直してください");
-    }
-  };
-
-  const signout = () => {
-    nookies.destroy(null, "auth_token");
-    setUser(null);
-  };
-
-  const value = {
-    signin,
-    signout,
-  };
 
   if (isLoading) {
     return (
@@ -113,5 +57,5 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     );
   }
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <>{children}</>;
 };

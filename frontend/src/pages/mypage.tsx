@@ -8,22 +8,21 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useAuth } from "../context/auth";
 import apiClient from "../lib/apiClient";
 import { useRouter } from "next/router";
 import BackLink from "../../components/BackLink";
 import PageHead from "../../components/PageHead";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import userAtom from "../../recoil/atom/userAtoms";
 import ProtectRoute from "../../components/ProtectRoute";
 
 // CSSインポート
 import styles from "../styles/common.module.css";
+import { signout } from "../lib/authHelpers";
 
 const MyPage = () => {
   const router = useRouter();
-  const { signout } = useAuth();
-  const user = useRecoilValue(userAtom);
+  const [user, setUser] = useRecoilState(userAtom);
 
   // アカウント情報
   const [email, setEmail] = useState<string>("");
@@ -87,7 +86,7 @@ const MyPage = () => {
           })
           .then(() => {
             alert("ユーザアカウトを削除しました");
-            signout();
+            signout(setUser);
             router.push("/");
           })
           .catch((err) => {
