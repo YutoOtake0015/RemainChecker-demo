@@ -1,7 +1,7 @@
 import apiClient from "./apiClient";
 import nookies from "nookies";
 
-export const signin = async (setUser) => {
+export const fetchUser = async (setUser) => {
   try {
     // サインイン時、ユーザーをセット
     apiClient
