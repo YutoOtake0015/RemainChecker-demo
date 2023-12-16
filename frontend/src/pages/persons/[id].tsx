@@ -16,12 +16,12 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { useRouter } from "next/router";
 import BackLink from "../../../components/BackLink";
 import PageHead from "../../../components/PageHead";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../../../recoil/atom/userAtoms";
-import { useAuth } from "../../context/auth";
 
 // CSSインポート
 import styles from "../../styles/persons/personStyle.module.css";
+import { signout } from "../../lib/authHelpers";
 
 type sexType = "male" | "female";
 
@@ -56,8 +56,7 @@ export const getServerSideProps = async ({ req, params }) => {
 
 const PersonPage = ({ person }) => {
   const router = useRouter();
-  const user = useRecoilValue(userAtom);
-  const { signout } = useAuth();
+  const [user, setUser] = useRecoilState(userAtom);
 
   // ユーザ情報
   const [personName, setPersonName] = useState<string>("");
@@ -148,7 +147,7 @@ const PersonPage = ({ person }) => {
   }, []);
 
   const redirectToLogin = () => {
-    signout();
+    signout(setUser);
     router.push("/signin");
   };
 

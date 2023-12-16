@@ -6,9 +6,12 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import apiClient from "../lib/apiClient";
 import { useRouter } from "next/router";
-import { useAuth } from "../context/auth";
+// import { useAuth } from "../context/auth";
 import PageHead from "../../components/PageHead";
 import HomeLink from "../../components/HomeLink";
+import { useSetRecoilState } from "recoil";
+import userAtom from "../../recoil/atom/userAtoms";
+import { signin } from "../lib/authHelpers";
 
 // CSSインポート
 import styles from "../styles/common.module.css";
@@ -21,9 +24,12 @@ export default function SignIn() {
   // エラー表示
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
+  // ユーザセット関数
+  const setUser = useSetRecoilState(userAtom);
+
   const router = useRouter();
 
-  const { signin } = useAuth();
+  // const { signin } = useAuth();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -35,7 +41,7 @@ export default function SignIn() {
           password,
         })
         .then((res) => {
-          signin();
+          signin(setUser);
           router.push("/");
         })
         .catch((err) => {
