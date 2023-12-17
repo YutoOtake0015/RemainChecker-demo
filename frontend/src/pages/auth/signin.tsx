@@ -4,18 +4,18 @@ import { useRouter } from "next/router";
 
 // state
 import { useRecoilState, useSetRecoilState } from "recoil";
-import errMessagesAtom from "../../recoil/atom/errMessagesAtom";
-import userAtom from "../../recoil/atom/userAtoms";
+import errMessagesAtom from "../../../recoil/atom/errMessagesAtom";
+import userAtom from "../../../recoil/atom/userAtoms";
 
 // library
-import apiClient from "../lib/apiClient";
-import { fetchUser } from "../lib/authHelpers";
-import { handleErrorResponse } from "../lib/errorHandler";
+import apiClient from "../../lib/apiClient";
+import { fetchUser } from "../../lib/authHelpers";
+import { handleErrorResponse } from "../../lib/errorHandler";
 
 // components
-import PageHead from "../../components/PageHead";
-import HomeLink from "../../components/HomeLink";
-import ErrorMessageList from "../../components/ErrorMessageList";
+import PageHead from "../../../components/PageHead";
+import HomeLink from "../../../components/HomeLink";
+import ErrorMessageList from "../../../components/ErrorMessageList";
 
 // MUI
 import Button from "@mui/material/Button";
@@ -25,7 +25,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
 // CSS
-import styles from "../styles/common.module.css";
+import styles from "../../styles/common.module.css";
 
 export default function SignIn() {
   const router = useRouter();
@@ -34,7 +34,7 @@ export default function SignIn() {
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
 
-  // 状態管理
+  // 共有情報
   const setUser = useSetRecoilState(userAtom);
   const [validationErrorMessages, setValidationErrorMessages] =
     useRecoilState(errMessagesAtom);
@@ -49,11 +49,10 @@ export default function SignIn() {
           password,
         })
         .then(() => {
-          fetchUser(setUser);
-          router.push("/");
+          fetchUser(setUser, router);
+          router.push("/mypage");
         })
         .catch((err) => {
-          console.log("type: ", typeof err);
           handleErrorResponse(
             err,
             router,

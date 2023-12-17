@@ -1,7 +1,6 @@
 import apiClient from "./apiClient";
-import nookies from "nookies";
 
-export const fetchUser = async (setUser) => {
+export const fetchUser = async (setUser, router) => {
   try {
     // サインイン時、ユーザーをセット
     apiClient
@@ -11,11 +10,11 @@ export const fetchUser = async (setUser) => {
       })
       .catch((err) => {
         handleErrorResponse(err);
-        signout(setUser);
+        signout(setUser, router);
       });
   } catch (err) {
     alert("予期しないエラーが発生しました\nもう一度やり直してください");
-    signout(setUser);
+    signout(setUser, router);
   }
 };
 
@@ -32,7 +31,13 @@ const handleErrorResponse = (err) => {
   }
 };
 
-export const signout = (setUser) => {
-  nookies.destroy(null, "auth_token");
+export const signout = async (setUser, router) => {
+  // Cookie削除
+  await apiClient.get("/auth/clearCookie");
+
+  // ユーザ情報削除
   setUser(null);
+
+  // ログイン画面に遷移
+  router.push("/auth/signin");
 };
