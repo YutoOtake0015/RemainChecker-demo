@@ -3,16 +3,19 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 // state
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../../../recoil/atom/userAtoms";
+import errMessagesAtom from "../../../recoil/atom/errMessagesAtom";
 
 // library
 import apiClient from "../../lib/apiClient";
+import { handleErrorResponse } from "../../lib/errorHandler";
 
 // components
 import BackLink from "../../../components/BackLink";
 import PageHead from "../../../components/PageHead";
 import ProtectRoute from "../../../components/ProtectRoute";
+import ErrorMessageList from "../../../components/ErrorMessageList";
 
 // MUI
 import {
@@ -36,24 +39,28 @@ type sexType = "male" | "female";
 
 const CreatePersonData = () => {
   const router = useRouter();
-  const user = useRecoilValue(userAtom);
 
   // ユーザ情報
   const [personName, setPersonName] = useState<string>();
   const [sex, setSex] = useState<sexType | "">("");
   const [birthDate, setBirthDate] = useState<Date>(null);
 
-  // エラー表示
-  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  // 状態管理
+  const user = useRecoilValue(userAtom);
+  const [validationErrorMessages, setValidationErrorMessages] =
+    useRecoilState(errMessagesAtom);
 
   // 登録件数を確認
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     const getPersonsCount = async () => {
       await apiClient.get("/persons/findAllCount").catch((err) => {
-        console.log("err: ", err);
-        handleErrorResponse(err);
-        router.push("/persons");
+        handleErrorResponse(
+          err,
+          router,
+          "/persons",
+          setValidationErrorMessages,
+        );
       });
     };
 
@@ -76,28 +83,15 @@ const CreatePersonData = () => {
           router.push("/persons");
         })
         .catch((err) => {
-          handleErrorResponse(err);
+          handleErrorResponse(
+            err,
+            router,
+            "/persons",
+            setValidationErrorMessages,
+          );
         });
     } catch (err) {
       alert("予期しないエラーが発生しました。\nもう一度やり直してください。");
-    }
-  };
-
-  const handleErrorResponse = (err) => {
-    switch (err.response.status) {
-      case 500:
-        alert("サーバで問題が発生しました。\nもう一度やり直してください。");
-        router.push("/persons/create");
-        break;
-      case 403:
-        console.log("通過");
-        alert(err.response.data.message);
-        break;
-      case 400:
-        setValidationErrors(err.response.data.messages);
-        break;
-      default:
-        alert("予期しないエラーが発生しました。\nもう一度やり直してください。");
     }
   };
 
@@ -112,14 +106,8 @@ const CreatePersonData = () => {
             <Typography component="h1" variant="h5">
               余命を登録しましょう
             </Typography>
-            {validationErrors.length > 0 && (
-              <Box style={{ color: "red" }}>
-                <ul>
-                  {validationErrors.map((error, index) => (
-                    <li key={index}>{error}</li>
-                  ))}
-                </ul>
-              </Box>
+            {validationErrorMessages && (
+              <ErrorMessageList messages={validationErrorMessages} />
             )}
             <Box
               component="form"

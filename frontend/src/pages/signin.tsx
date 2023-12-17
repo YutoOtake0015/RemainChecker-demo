@@ -3,16 +3,19 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 
 // state
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import errMessagesAtom from "../../recoil/atom/errMessagesAtom";
 import userAtom from "../../recoil/atom/userAtoms";
 
 // library
 import apiClient from "../lib/apiClient";
 import { fetchUser } from "../lib/authHelpers";
+import { handleErrorResponse } from "../lib/errorHandler";
 
 // components
 import PageHead from "../../components/PageHead";
 import HomeLink from "../../components/HomeLink";
+import ErrorMessageList from "../../components/ErrorMessageList";
 
 // MUI
 import Button from "@mui/material/Button";
@@ -25,17 +28,16 @@ import Container from "@mui/material/Container";
 import styles from "../styles/common.module.css";
 
 export default function SignIn() {
+  const router = useRouter();
+
   // アカウント情報
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
 
-  // エラー表示
-  const [validationErrors, setValidationErrors] = useState<string[]>([]);
-
-  // ユーザセット関数
+  // 状態管理
   const setUser = useSetRecoilState(userAtom);
-
-  const router = useRouter();
+  const [validationErrorMessages, setValidationErrorMessages] =
+    useRecoilState(errMessagesAtom);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -51,28 +53,16 @@ export default function SignIn() {
           router.push("/");
         })
         .catch((err) => {
-          handleErrorResponse(err);
+          console.log("type: ", typeof err);
+          handleErrorResponse(
+            err,
+            router,
+            router.asPath,
+            setValidationErrorMessages,
+          );
         });
     } catch (error) {
       alert("予期しないエラーが発生しました。\nもう一度やり直してください。");
-    }
-  };
-
-  const handleErrorResponse = (err) => {
-    switch (err.response.status) {
-      case 500:
-        alert("サーバで問題が発生しました。\nもう一度やり直してください。");
-        router.push("/signin");
-        break;
-      case 400:
-        setValidationErrors(err.response.data.messages);
-        break;
-      case 401:
-        alert(err.response.data.message);
-        setValidationErrors([]);
-        break;
-      default:
-        alert("予期しないエラーが発生しました。\nもう一度やり直してください。");
     }
   };
 
@@ -86,14 +76,8 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             アカウントにログイン
           </Typography>
-          {validationErrors.length > 0 && (
-            <Box style={{ color: "red" }}>
-              <ul>
-                {validationErrors.map((error, index) => (
-                  <li key={index}>{error}</li>
-                ))}
-              </ul>
-            </Box>
+          {validationErrorMessages && (
+            <ErrorMessageList messages={validationErrorMessages} />
           )}
           <Box
             component="form"

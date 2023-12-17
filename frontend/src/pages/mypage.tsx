@@ -5,15 +5,18 @@ import { useRouter } from "next/router";
 // state
 import { useRecoilState } from "recoil";
 import userAtom from "../../recoil/atom/userAtoms";
+import errMessagesAtom from "../../recoil/atom/errMessagesAtom";
 
 // library
 import apiClient from "../lib/apiClient";
 import { signout } from "../lib/authHelpers";
+import { handleErrorResponse } from "../lib/errorHandler";
 
 // components
 import BackLink from "../../components/BackLink";
 import PageHead from "../../components/PageHead";
 import ProtectRoute from "../../components/ProtectRoute";
+import ErrorMessageList from "../../components/ErrorMessageList";
 
 // MUI
 import {
@@ -31,14 +34,15 @@ import styles from "../styles/common.module.css";
 
 const MyPage = () => {
   const router = useRouter();
-  const [user, setUser] = useRecoilState(userAtom);
 
   // アカウント情報
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string | null>("");
 
-  // エラー表示
-  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  // 状態管理
+  const [user, setUser] = useRecoilState(userAtom);
+  const [validationErrorMessages, setValidationErrorMessages] =
+    useRecoilState(errMessagesAtom);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,30 +59,15 @@ const MyPage = () => {
           router.push("/");
         })
         .catch((err) => {
-          handleErrorResponse(err);
+          handleErrorResponse(
+            err,
+            router,
+            router.asPath,
+            setValidationErrorMessages,
+          );
         });
     } catch (err) {
       alert("予期しないエラーが発生しました。\nもう一度やり直してください。");
-    }
-  };
-
-  const handleErrorResponse = (err) => {
-    switch (err.response.status) {
-      case 500:
-        alert("サーバで問題が発生しました。\nもう一度やり直してください。");
-        router.push("/mypage");
-        break;
-      case 400:
-        err.response.data.message
-          ? alert(err.response.data.message)
-          : setValidationErrors(err.response.data.messages);
-        break;
-      case 401:
-        alert(err.response.data.message);
-        setValidationErrors([]);
-        break;
-      default:
-        alert("予期しないエラーが発生しました。\nもう一度やり直してください。");
     }
   };
 
@@ -132,14 +121,8 @@ const MyPage = () => {
             <Typography component="h1" variant="h5">
               アカウントを編集
             </Typography>
-            {validationErrors.length > 0 && (
-              <Box style={{ color: "red" }}>
-                <ul>
-                  {validationErrors.map((error, index) => (
-                    <li key={index}>{error}</li>
-                  ))}
-                </ul>
-              </Box>
+            {validationErrorMessages && (
+              <ErrorMessageList messages={validationErrorMessages} />
             )}
             <Box
               component="form"

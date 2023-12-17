@@ -40,14 +40,18 @@ type personType = {
 } | null;
 
 export default function Home() {
-  const user = useRecoilValue(userAtom);
   const router = useRouter();
 
+  // 状態管理
+  const user = useRecoilValue(userAtom);
+
+  // 人物情報
   const [person, setPerson] = useState<personType>(null);
   const [selectBirthDate, setSelectBirthDate] = useState<Date | null>(null);
   const [selectSex, setSelectSex] = useState<sexType | "">("");
   const [remainingLifeKey, setRemainingLifeKey] = useState<number>(0);
 
+  // 年齢算出
   const calculateAge = (birthDate: Date) => {
     const currentDate = new Date();
     return differenceInYears(currentDate, birthDate);
