@@ -4,18 +4,18 @@ import { useRouter } from "next/router";
 
 // state
 import { useRecoilState, useRecoilValue } from "recoil";
-import userAtom from "../../../recoil/atom/userAtoms";
-import errMessagesAtom from "../../../recoil/atom/errMessagesAtom";
+import userAtom from "../../../../recoil/atom/userAtoms";
+import errMessagesAtom from "../../../../recoil/atom/errMessagesAtom";
 
 // library
-import apiClient from "../../lib/apiClient";
-import { handleErrorResponse } from "../../lib/errorHandler";
+import apiClient from "../../../lib/apiClient";
+import { handleErrorResponse } from "../../../lib/errorHandler";
 
 // components
-import BackLink from "../../../components/BackLink";
-import PageHead from "../../../components/PageHead";
-import ProtectRoute from "../../../components/ProtectRoute";
-import ErrorMessageList from "../../../components/ErrorMessageList";
+import BackLink from "../../../../components/BackLink";
+import PageHead from "../../../../components/PageHead";
+import ProtectRoute from "../../../../components/ProtectRoute";
+import ErrorMessageList from "../../../../components/ErrorMessageList";
 
 // MUI
 import {
@@ -33,7 +33,7 @@ import {
 import { DatePicker } from "@mui/x-date-pickers";
 
 // CSS
-import styles from "../../styles/persons/createStyle.module.css";
+import styles from "../../../styles/persons/createStyle.module.css";
 
 type sexType = "male" | "female";
 
@@ -45,27 +45,10 @@ const CreatePersonData = () => {
   const [sex, setSex] = useState<sexType | "">("");
   const [birthDate, setBirthDate] = useState<Date>(null);
 
-  // 状態管理
+  // 共有情報
   const user = useRecoilValue(userAtom);
   const [validationErrorMessages, setValidationErrorMessages] =
     useRecoilState(errMessagesAtom);
-
-  // 登録件数を確認
-  /* eslint-disable react-hooks/exhaustive-deps */
-  useEffect(() => {
-    const getPersonsCount = async () => {
-      await apiClient.get("/persons/findAllCount").catch((err) => {
-        handleErrorResponse(
-          err,
-          router,
-          "/persons",
-          setValidationErrorMessages,
-        );
-      });
-    };
-
-    getPersonsCount();
-  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -80,13 +63,13 @@ const CreatePersonData = () => {
           userId: user.id,
         })
         .then(() => {
-          router.push("/persons");
+          router.push("/mypage/persons");
         })
         .catch((err) => {
           handleErrorResponse(
             err,
             router,
-            "/persons",
+            "/mypage/persons",
             setValidationErrorMessages,
           );
         });
@@ -94,6 +77,23 @@ const CreatePersonData = () => {
       alert("予期しないエラーが発生しました。\nもう一度やり直してください。");
     }
   };
+
+  // 登録件数を確認
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    const getPersonsCount = async () => {
+      await apiClient.get("/persons/checkCount").catch((err) => {
+        return handleErrorResponse(
+          err,
+          router,
+          "/mypage/persons",
+          setValidationErrorMessages,
+        );
+      });
+    };
+
+    getPersonsCount();
+  }, []);
 
   return (
     <>

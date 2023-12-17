@@ -33,10 +33,12 @@ export const handleErrorResponse: handleErrorResponseType = (
       setValidationErrorMessages(data.messages);
       break;
     case 401:
+      alert(data.message || "エラーが発生しました。");
+      router.push("/auth/signin");
+      break;
     case 403:
     case 404:
       alert(data.message || "エラーが発生しました。");
-      setValidationErrorMessages([]);
       router.push(redirectUrl);
       break;
     case 500:

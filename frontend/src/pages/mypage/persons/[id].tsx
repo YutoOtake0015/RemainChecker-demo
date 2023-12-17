@@ -4,18 +4,18 @@ import { useRouter } from "next/router";
 
 // state
 import { useRecoilState } from "recoil";
-import userAtom from "../../../recoil/atom/userAtoms";
-import errMessagesAtom from "../../../recoil/atom/errMessagesAtom";
+import userAtom from "../../../../recoil/atom/userAtoms";
+import errMessagesAtom from "../../../../recoil/atom/errMessagesAtom";
 
 // library
-import apiClient from "../../lib/apiClient";
-import { signout } from "../../lib/authHelpers";
-import { handleErrorResponse } from "../../lib/errorHandler";
+import apiClient from "../../../lib/apiClient";
+import { signout } from "../../../lib/authHelpers";
+import { handleErrorResponse } from "../../../lib/errorHandler";
 
 // components
-import BackLink from "../../../components/BackLink";
-import PageHead from "../../../components/PageHead";
-import ErrorMessageList from "../../../components/ErrorMessageList";
+import BackLink from "../../../../components/BackLink";
+import PageHead from "../../../../components/PageHead";
+import ErrorMessageList from "../../../../components/ErrorMessageList";
 
 // MUI
 import {
@@ -33,7 +33,7 @@ import {
 import { DatePicker } from "@mui/x-date-pickers";
 
 // CSS
-import styles from "../../styles/persons/personStyle.module.css";
+import styles from "../../../styles/persons/personStyle.module.css";
 
 type sexType = "male" | "female";
 
@@ -74,7 +74,7 @@ const PersonPage = ({ person }) => {
   const [sex, setSex] = useState<sexType | "">("");
   const [birthDate, setBirthDate] = useState<Date>(null);
 
-  // 状態管理
+  // 共有情報
   const [user, setUser] = useRecoilState(userAtom);
   const [validationErrorMessages, setValidationErrorMessages] =
     useRecoilState(errMessagesAtom);
@@ -92,13 +92,13 @@ const PersonPage = ({ person }) => {
         })
         .then((res) => {
           alert(res.data.message);
-          router.push("/persons");
+          router.back();
         })
         .catch((err) => {
           handleErrorResponse(
             err,
             router,
-            "/persons",
+            "/mypage/persons",
             setValidationErrorMessages,
           );
         });
@@ -118,7 +118,7 @@ const PersonPage = ({ person }) => {
           })
           .then((res) => {
             alert(res.data.message);
-            router.push("/persons");
+            router.back();
           })
           .catch((err) => {
             handleErrorResponse(
@@ -143,14 +143,9 @@ const PersonPage = ({ person }) => {
     } else {
       // 人物情報が利用できない場合の処理
       alert("人物情報を取得できませんでした");
-      router.push("/persons");
+      router.back();
     }
   }, []);
-
-  const redirectToLogin = () => {
-    signout(setUser);
-    router.push("/signin");
-  };
 
   return (
     <>
@@ -257,7 +252,7 @@ const PersonPage = ({ person }) => {
           </Container>
         </>
       ) : (
-        redirectToLogin()
+        router.back()
       )}
     </>
   );

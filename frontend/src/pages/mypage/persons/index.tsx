@@ -4,19 +4,19 @@ import Link from "next/link";
 
 // state
 import { useRecoilValue } from "recoil";
-import userAtom from "../../../recoil/atom/userAtoms";
+import userAtom from "../../../../recoil/atom/userAtoms";
 
 // utility
 import { format } from "date-fns";
 
 // library
-import apiClient from "../../lib/apiClient";
+import apiClient from "../../../lib/apiClient";
 
 // components
-import RemainingLife from "../../../components/RemainingLife";
-import BackLink from "../../../components/BackLink";
-import PageHead from "../../../components/PageHead";
-import ProtectRoute from "../../../components/ProtectRoute";
+import RemainingLife from "../../../../components/RemainingLife";
+import BackLink from "../../../../components/BackLink";
+import PageHead from "../../../../components/PageHead";
+import ProtectRoute from "../../../../components/ProtectRoute";
 
 // MUI
 import {
@@ -41,7 +41,7 @@ const Persons = () => {
   // 人物情報
   const [persons, setPersons] = useState<personData[]>();
 
-  // 状態管理
+  // 共有情報
   const user = useRecoilValue(userAtom);
 
   // ソート設定
@@ -115,7 +115,6 @@ const Persons = () => {
       width: 200,
       flex: 0.3,
       renderCell: (params: GridRenderCellParams<any>) => (
-        // <RemainingLife person={person:{sex: ...params.row.sex,birthDate: ...params.row.birthDate} } />
         <RemainingLife
           person={{ sex: params.row.sex, birthDate: params.row.birthDate }}
         />
@@ -131,7 +130,7 @@ const Persons = () => {
       flex: 0.3,
       renderCell: (params: GridRenderCellParams<any>) => (
         <>
-          <Link className="text-blue-400" href={`/persons/${params.id}`}>
+          <Link className="text-blue-400" href={`/mypage/persons/${params.id}`}>
             編集
           </Link>
         </>
@@ -148,7 +147,7 @@ const Persons = () => {
         {persons && (
           <Container maxWidth="md">
             <Box>
-              <Link href="/persons/create">
+              <Link href="/mypage/persons/create">
                 <Button
                   variant="contained"
                   sx={{

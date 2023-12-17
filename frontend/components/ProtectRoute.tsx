@@ -18,7 +18,7 @@ const ProtectRoute: React.FC<{ user: userType; children: ReactNode }> = ({
 
   // userが存在しない場合、ログイン画面にリダイレクト
   if (!user) {
-    router.push("/signin");
+    router.push("/auth/signin");
     return;
   }
 

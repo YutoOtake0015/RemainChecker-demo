@@ -4,16 +4,16 @@ import { useRouter } from "next/router";
 
 // state
 import { useRecoilState } from "recoil";
-import errMessagesAtom from "../../recoil/atom/errMessagesAtom";
+import errMessagesAtom from "../../../recoil/atom/errMessagesAtom";
 
 // library
-import apiClient from "../lib/apiClient";
-import { handleErrorResponse } from "../lib/errorHandler";
+import apiClient from "../../lib/apiClient";
+import { handleErrorResponse } from "../../lib/errorHandler";
 
 // components
-import PageHead from "../../components/PageHead";
-import HomeLink from "../../components/HomeLink";
-import ErrorMessageList from "../../components/ErrorMessageList";
+import PageHead from "../../../components/PageHead";
+import HomeLink from "../../../components/HomeLink";
+import ErrorMessageList from "../../../components/ErrorMessageList";
 
 // MUI
 import Button from "@mui/material/Button";
@@ -26,7 +26,7 @@ import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 
 // CSS
-import styles from "../styles/common.module.css";
+import styles from "../../styles/common.module.css";
 
 type sexType = "male" | "female";
 
@@ -42,7 +42,7 @@ export default function SignUp() {
   const [sex, setSex] = useState<sexType | "">("");
   const [birthDate, setBirthDate] = useState<Date>(null);
 
-  // 状態管理
+  // 共有情報
   const [validationErrorMessages, setValidationErrorMessages] =
     useRecoilState(errMessagesAtom);
 
@@ -59,7 +59,7 @@ export default function SignUp() {
           sex,
         })
         .then(() => {
-          router.push("/signin");
+          router.push("/auth/signin");
         })
         .catch((err) => {
           handleErrorResponse(

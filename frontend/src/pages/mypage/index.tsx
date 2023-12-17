@@ -5,32 +5,21 @@ import Link from "next/link";
 
 // state
 import { useRecoilValue } from "recoil";
-import userAtom from "../../recoil/atom/userAtoms";
+import userAtom from "../../../recoil/atom/userAtoms";
 
 // utility
 import { format, differenceInYears } from "date-fns";
 
 // components
-import RemainingLife from "../../components/RemainingLife";
-import PageHead from "../../components/PageHead";
+import RemainingLife from "../../../components/RemainingLife";
+import PageHead from "../../../components/PageHead";
 
 // MUI
-import {
-  Box,
-  Button,
-  Container,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
+import { Box, Button, Container, Typography } from "@mui/material";
 import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
 
 // CSS
-import styles from "../styles/indexStyle.module.css";
+import styles from "../../styles/indexStyle.module.css";
 
 type sexType = "male" | "female";
 
@@ -128,14 +117,11 @@ export default function Home() {
       </PageHead>
       <Container>
         <Box className={styles.container}>
-          {person && (
+          {user && (
             <>
-              <Link href="/" passHref>
+              <Link href="/mypage/persons" passHref>
                 <Button
-                  component="a"
-                  onClick={handleReset}
                   variant="contained"
-                  style={{ margin: "1rem 0" }}
                   sx={{
                     mt: 3,
                     mb: 2,
@@ -144,13 +130,13 @@ export default function Home() {
                     margin: "1rem 0",
                   }}
                 >
-                  再設定
+                  みんなの余命
                 </Button>
               </Link>
             </>
           )}
 
-          {person ? (
+          {person && (
             <>
               <Box className={styles.infoBox}>
                 <Typography variant="subtitle1">
@@ -189,65 +175,6 @@ export default function Home() {
                 </Typography>
                 <Box className={styles.remainingLife}>
                   <RemainingLife key={remainingLifeKey} person={person} />
-                </Box>
-              </Box>
-            </>
-          ) : (
-            <>
-              <Box className={styles.settingContainer}>
-                <Typography component="h1" variant="h5">
-                  情報を設定して余命を表示しましょう
-                </Typography>
-                <Box
-                  component="form"
-                  noValidate
-                  onSubmit={handleSubmit}
-                  sx={{ mt: 3 }}
-                >
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} sm={8} sx={{ margin: "auto" }}>
-                      <FormControl fullWidth>
-                        <DatePicker
-                          label="生年月日"
-                          onChange={(e: Date) => setSelectBirthDate(e as Date)}
-                          value={selectBirthDate}
-                          maxDate={new Date()}
-                          openTo="year"
-                          views={["year", "month", "day"]}
-                        />
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                      <FormControl fullWidth>
-                        <InputLabel htmlFor="gender">性別</InputLabel>
-                        <Select
-                          value={selectSex}
-                          required
-                          label="性別"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setSelectSex(e.target.value as sexType)
-                          }
-                        >
-                          <MenuItem value={"male"}>男</MenuItem>
-                          <MenuItem value={"female"}>女</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                  </Grid>
-
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{
-                      mt: 3,
-                      mb: 2,
-                      backgroundColor: "#1565C0",
-                      color: "#FFFFFF",
-                    }}
-                  >
-                    設定
-                  </Button>
                 </Box>
               </Box>
             </>
