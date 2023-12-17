@@ -38,8 +38,13 @@ type personData = {
 };
 
 const Persons = () => {
+  // 人物情報
   const [persons, setPersons] = useState<personData[]>();
+
+  // 状態管理
   const user = useRecoilValue(userAtom);
+
+  // ソート設定
   const [sortModel, setSortModel] = useState<GridSortModel>([]);
 
   useEffect(() => {
