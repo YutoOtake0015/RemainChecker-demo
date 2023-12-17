@@ -1,5 +1,6 @@
 // React & Next.js
 import React, { useState } from "react";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -14,6 +15,7 @@ import { signout } from "../src/lib/authHelpers";
 import {
   AppBar,
   Box,
+  Button,
   Container,
   IconButton,
   List,
@@ -34,7 +36,12 @@ const buttonStyle = {
 };
 
 const Navbar = () => {
+  const router = useRouter();
+
+  // Drower スイッチ
   const [open, setOpen] = useState<boolean>(false);
+
+  // 共有情報
   const [user, setUser] = useRecoilState(userAtom);
 
   // メニューの切り替え
@@ -45,9 +52,9 @@ const Navbar = () => {
     setOpen(false);
   };
 
-  const handleSignout = () => {
-    signout(setUser);
+  const handleSignout = async () => {
     handleDrawerClose();
+    await signout(setUser, router);
   };
 
   const handleMypage = () => {
@@ -62,6 +69,16 @@ const Navbar = () => {
     handleDrawerClose();
   };
 
+  const handleLogoClick = () => {
+    if (user) {
+      // ログイン済みの場合、"/mypage"に遷移
+      router.push("/mypage");
+    } else {
+      // 未ログインの場合、"/"に遷移
+      router.push("/");
+    }
+  };
+
   return (
     <AppBar
       component="header"
@@ -71,14 +88,14 @@ const Navbar = () => {
       <Container maxWidth="md">
         <Box className={styles.headerContainer}>
           <Box component="h1">
-            <Link href="/">
+            <Button onClick={handleLogoClick}>
               <Image
                 src="/logo.png"
                 width={180}
                 height={40}
                 alt="RemainChecker"
               />
-            </Link>
+            </Button>
           </Box>
           <List component="nav" className={styles.listGroup}>
             <ListItem disablePadding>
@@ -99,12 +116,18 @@ const Navbar = () => {
                   sx={{ display: { xs: "none", md: "block" } }}
                 >
                   <div style={{ display: "flex" }}>
-                    <Link href={`/signin`} style={{ textDecoration: "none" }}>
+                    <Link
+                      href={`/auth/signin`}
+                      style={{ textDecoration: "none" }}
+                    >
                       <ListItemButton sx={buttonStyle}>
                         <ListItemText primary={`ログイン`} />
                       </ListItemButton>
                     </Link>
-                    <Link href={`/signup`} style={{ textDecoration: "none" }}>
+                    <Link
+                      href={`/auth/signup`}
+                      style={{ textDecoration: "none" }}
+                    >
                       <ListItemButton sx={buttonStyle}>
                         <ListItemText primary={`サインアップ`} />
                       </ListItemButton>
@@ -118,12 +141,18 @@ const Navbar = () => {
                 sx={{ display: { xs: "none", md: "block" } }}
               >
                 <div style={{ display: "flex" }}>
-                  <Link href={`/signin`} style={{ textDecoration: "none" }}>
+                  <Link
+                    href={`/auth/signin`}
+                    style={{ textDecoration: "none" }}
+                  >
                     <ListItemButton sx={buttonStyle} onClick={handleSignout}>
                       <ListItemText primary={`サインアウト`} />
                     </ListItemButton>
                   </Link>
-                  <Link href={`/mypage`} style={{ textDecoration: "none" }}>
+                  <Link
+                    href={`/mypage/setting`}
+                    style={{ textDecoration: "none" }}
+                  >
                     <ListItemButton sx={buttonStyle}>
                       <ListItemText primary={`ユーザ設定`} />
                     </ListItemButton>
@@ -147,13 +176,13 @@ const Navbar = () => {
           {!user ? (
             <>
               <ListItem disablePadding sx={{ display: "block" }}>
-                <Link href={`/signin`} style={{ textDecoration: "none" }}>
+                <Link href={`/auth/signin`} style={{ textDecoration: "none" }}>
                   <ListItemButton sx={buttonStyle} onClick={handleSignin}>
                     <ListItemText primary={`ログイン`} />
                   </ListItemButton>
                 </Link>
 
-                <Link href={`/signup`} style={{ textDecoration: "none" }}>
+                <Link href={`/auth/signup`} style={{ textDecoration: "none" }}>
                   <ListItemButton sx={buttonStyle} onClick={handleSignup}>
                     <ListItemText primary={`サインアップ`} />
                   </ListItemButton>
@@ -163,7 +192,7 @@ const Navbar = () => {
           ) : (
             <>
               <ListItem disablePadding sx={{ display: "block" }}>
-                <Link href={`/signin`} style={{ textDecoration: "none" }}>
+                <Link href={`/auth/signin`} style={{ textDecoration: "none" }}>
                   <ListItemButton sx={buttonStyle} onClick={handleSignout}>
                     <ListItemText primary={`サインアウト`} />
                   </ListItemButton>

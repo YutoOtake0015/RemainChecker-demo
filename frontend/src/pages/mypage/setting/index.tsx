@@ -4,19 +4,19 @@ import { useRouter } from "next/router";
 
 // state
 import { useRecoilState } from "recoil";
-import userAtom from "../../recoil/atom/userAtoms";
-import errMessagesAtom from "../../recoil/atom/errMessagesAtom";
+import userAtom from "../../../../recoil/atom/userAtoms";
+import errMessagesAtom from "../../../../recoil/atom/errMessagesAtom";
 
 // library
-import apiClient from "../lib/apiClient";
-import { signout } from "../lib/authHelpers";
-import { handleErrorResponse } from "../lib/errorHandler";
+import apiClient from "../../../lib/apiClient";
+import { signout } from "../../../lib/authHelpers";
+import { handleErrorResponse } from "../../../lib/errorHandler";
 
 // components
-import BackLink from "../../components/BackLink";
-import PageHead from "../../components/PageHead";
-import ProtectRoute from "../../components/ProtectRoute";
-import ErrorMessageList from "../../components/ErrorMessageList";
+import BackLink from "../../../../components/BackLink";
+import PageHead from "../../../../components/PageHead";
+import ProtectRoute from "../../../../components/ProtectRoute";
+import ErrorMessageList from "../../../../components/ErrorMessageList";
 
 // MUI
 import {
@@ -30,16 +30,16 @@ import {
 } from "@mui/material";
 
 // CSS
-import styles from "../styles/common.module.css";
+import styles from "../../../styles/common.module.css";
 
-const MyPage = () => {
+const Setting = () => {
   const router = useRouter();
 
   // アカウント情報
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string | null>("");
 
-  // 状態管理
+  // 共有情報
   const [user, setUser] = useRecoilState(userAtom);
   const [validationErrorMessages, setValidationErrorMessages] =
     useRecoilState(errMessagesAtom);
@@ -56,7 +56,7 @@ const MyPage = () => {
         })
         .then((res) => {
           alert(res.data.message);
-          router.push("/");
+          router.back();
         })
         .catch((err) => {
           handleErrorResponse(
@@ -84,8 +84,7 @@ const MyPage = () => {
           })
           .then(() => {
             alert("ユーザアカウトを削除しました");
-            signout(setUser);
-            router.push("/");
+            signout(setUser, router);
           })
           .catch((err) => {
             if (err.response.status === 500) {
@@ -184,4 +183,4 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
+export default Setting;

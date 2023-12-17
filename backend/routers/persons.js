@@ -60,7 +60,7 @@ router.get("/findAll", isAuthenticated, async (req, res) => {
   }
 });
 
-router.get("/findAllCount", isAuthenticated, async (req, res) => {
+router.get("/checkCount", isAuthenticated, async (req, res) => {
   try {
     const personsCount = await prisma.person.count({
       where: { userId: req.userId },

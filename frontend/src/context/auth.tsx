@@ -34,22 +34,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     const fetchData = async () => {
-      // 認証tokenを取得
-      const token = document.cookie;
-
-      if (Object.keys(token).length !== 0) {
-        // tokenに応じたuserをセット
-        try {
-          const res = await apiClient.get("/users/find");
+      // ユーザ認証
+      await apiClient
+        .get("users/find")
+        .then((res) => {
           setUser(res.data.user);
-        } catch (err) {
-          // tokenに応じたuserを取得できない場合、認証情報に異常がある判断してサインアウトする
+
+          // ログイン状態でトップページに移動した場合、マイページに移動
+          if (router.asPath === "/") {
+            router.push("/mypage");
+          }
+        })
+        .catch(() => {
           alert(
             "システムとの通信が切断されました。\nログインからやり直してください。",
           );
-          token ? signout(setUser) : router.push("/");
-        }
-      }
+          signout(setUser, router);
+        });
+
       setIsLoading(false);
     };
 

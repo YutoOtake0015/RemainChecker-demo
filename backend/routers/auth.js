@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const signupSchema = require("../validators/signupSchema");
 const signinSchema = require("../validators/signinSchema");
+const isAuthenticated = require("../middlewares/isAuthenticated");
 
 const prisma = new PrismaClient();
 
@@ -109,6 +110,19 @@ router.post("/signin", async (req, res) => {
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
+});
+
+router.get("/clearCookie", async (req, res) => {
+  // Cookieの削除のレスポンスを生成
+  res.clearCookie("auth_token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
+  });
+
+  // ログイン画面にリダイレクト
+  return res.status(200).json({ message: "Cooki削除成功" });
 });
 
 module.exports = router;

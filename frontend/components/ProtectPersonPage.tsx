@@ -23,7 +23,7 @@ const ProtectPersonPage: React.FC<ProtectPersonPageProps> = ({
 
   // userが存在しない場合、ログイン画面にリダイレクト
   if (!user) {
-    router.push("/signin");
+    router.push("/auth/signin");
     return null;
   }
 
