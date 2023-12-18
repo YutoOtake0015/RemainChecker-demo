@@ -35,15 +35,24 @@ import { DatePicker } from "@mui/x-date-pickers";
 // CSS
 import styles from "../../../styles/persons/personStyle.module.css";
 
+import { parse } from "cookie";
+
 type sexType = "male" | "female";
 
 // サーバーサイドでのCookieの取得
-export const getServerSideProps = async ({ req, params }) => {
+// export const getServerSideProps = async ({ req, params }) => {
+export const getServerSideProps = async (context) => {
   try {
-    const { id } = params;
+    const { id } = context.params;
 
     // req.headers.cookie からCookieを取得
-    const token = req.headers.cookie ? req.headers.cookie : null;
+    // const token = req.headers.cookie ? req.headers.cookie : null;
+
+    const cookies = parse(context.req.headers.cookie || "");
+    const token = cookies.auth_token;
+
+    console.log("cookies: ", cookies);
+    console.log("token: ", token);
 
     // APIリクエストを非同期で実行
     const response = await apiClient.get(`/persons/find/${id}`, {
