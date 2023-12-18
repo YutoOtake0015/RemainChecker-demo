@@ -34,24 +34,25 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     const fetchData = async () => {
-      // ユーザ認証
-      await apiClient
-        .get("users/find")
-        .then((res) => {
-          setUser(res.data.user);
+      if (router.pathname.startsWith("/mypage")) {
+        // ユーザ認証
+        await apiClient
+          .get("users/find")
+          .then((res) => {
+            setUser(res.data.user);
 
-          // ログイン状態でトップページに移動した場合、マイページに移動
-          if (router.asPath === "/") {
-            router.push("/mypage");
-          }
-        })
-        .catch(() => {
-          alert(
-            "システムとの通信が切断されました。\nログインからやり直してください。",
-          );
-          signout(setUser, router);
-        });
-
+            // ログイン状態でトップページに移動した場合、マイページに移動
+            if (router.asPath === "/") {
+              router.push("/mypage");
+            }
+          })
+          .catch(() => {
+            alert(
+              "システムとの通信が切断されました。\nログインからやり直してください。",
+            );
+            signout(setUser, router);
+          });
+      }
       setIsLoading(false);
     };
 
