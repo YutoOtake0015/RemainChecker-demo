@@ -38,30 +38,19 @@ import styles from "../../../styles/persons/personStyle.module.css";
 type sexType = "male" | "female";
 
 // サーバーサイドでのCookieの取得
-export const getServerSideProps = async (context) => {
+export const getServerSideProps = async ({ req, params }) => {
   try {
-    console.log(" ****************************** ");
-    console.log("context: ", context);
+    const { id } = params;
 
-    const cookie = context.req.headers.cookie
-      ? context.req.headers.cookie
-      : null;
-    console.log(" ****************************** ");
-    console.log("cookie: ", cookie);
-
-    const id = context.params.id;
-    console.log(" ****************************** ");
-    console.log("id: ", id);
+    // req.headers.cookie からCookieを取得
+    const token = req.headers.cookie ? req.headers.cookie : null;
 
     // APIリクエストを非同期で実行
     const response = await apiClient.get(`/persons/find/${id}`, {
       headers: {
-        cookie,
+        cookie: token,
       },
     });
-
-    console.log(" ****************************** ");
-    console.log("response: ", response);
 
     // レスポンスデータをpropsとして返却
     return {

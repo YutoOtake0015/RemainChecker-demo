@@ -11,9 +11,6 @@ router.get("/find/:id", isAuthenticated, async (req, res) => {
   try {
     const { id } = req.params;
 
-    console.log("req.params: ", req.params);
-    console.log("id ", id);
-
     // idに対応する人物情報を取得
     const person = await prisma.person.findUnique({
       where: { id: Number(id) },
