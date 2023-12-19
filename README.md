@@ -16,8 +16,9 @@
  - 意味のある日々を過ごしたい人
 
 # サイトURL
-https://remain-check-yutootake0015.vercel.app/　<br >
+https://remain-checker.vercel.app/ 　<br >
 
+## ゲストログイン
 トップページでログインボタンを押下して遷移したログイン画面で以下の値を入力してください。
 - メールアドレス
   - **`test@sample.com`**
