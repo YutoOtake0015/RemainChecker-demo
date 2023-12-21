@@ -49,7 +49,7 @@ export default function SignIn() {
           password,
         })
         .then(() => {
-          fetchUser(setUser, router);
+          fetchUser(setUser, setValidationErrorMessages, router);
           router.push("/mypage");
         })
         .catch((err) => {
@@ -57,7 +57,7 @@ export default function SignIn() {
             err,
             router,
             router.asPath,
-            setValidationErrorMessages,
+            setValidationErrorMessages
           );
         });
     } catch (error) {

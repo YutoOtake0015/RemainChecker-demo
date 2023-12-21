@@ -1,6 +1,26 @@
-import apiClient from "./apiClient";
+// React & Next.js
+import { NextRouter } from "next/router";
 
-export const fetchUser = async (setUser, router) => {
+// state
+import { SetterOrUpdater } from "recoil";
+
+// library
+import apiClient from "./apiClient";
+import { handleErrorResponse } from "./errorHandler";
+
+type userType = null | {
+  id: number;
+  username: string;
+  email: string;
+  sex: string;
+  birthDate: string;
+};
+
+export const fetchUser = async (
+  setUser: SetterOrUpdater<userType>,
+  setValidationErrorMessages: SetterOrUpdater<string[]>,
+  router: NextRouter
+) => {
   try {
     // サインイン時、ユーザーをセット
     apiClient
@@ -9,25 +29,17 @@ export const fetchUser = async (setUser, router) => {
         setUser(res.data.user);
       })
       .catch((err) => {
-        handleErrorResponse(err);
+        handleErrorResponse(
+          err,
+          router,
+          router.asPath,
+          setValidationErrorMessages
+        );
         signout(setUser, router);
       });
   } catch (err) {
     alert("予期しないエラーが発生しました\nもう一度やり直してください");
     signout(setUser, router);
-  }
-};
-
-const handleErrorResponse = (err) => {
-  switch (err.response.status) {
-    case 500:
-      alert("サーバで問題が発生しました\nもう一度やり直してください");
-      break;
-    case 404:
-      alert(err.response.data.message);
-      break;
-    default:
-      alert("予期しないエラーが発生しました\nもう一度やり直してください");
   }
 };
 
