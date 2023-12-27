@@ -15,6 +15,9 @@ import PageHead from "../../../components/PageHead";
 import HomeLink from "../../../components/HomeLink";
 import ErrorMessageList from "../../../components/ErrorMessageList";
 
+// types
+import { SexType } from "../../types/type";
+
 // MUI
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -22,13 +25,17 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 
 // CSS
 import styles from "../../styles/common.module.css";
-
-type sexType = "male" | "female";
 
 export default function SignUp() {
   const router = useRouter();
@@ -39,8 +46,8 @@ export default function SignUp() {
   const [password, setPassword] = useState<string>("");
 
   // 人物情報
-  const [sex, setSex] = useState<sexType | "">("");
-  const [birthDate, setBirthDate] = useState<Date>(null);
+  const [sex, setSex] = useState<SexType>(null);
+  const [birthDate, setBirthDate] = useState<Date | null>(null);
 
   // 共有情報
   const [validationErrorMessages, setValidationErrorMessages] =
@@ -66,7 +73,7 @@ export default function SignUp() {
             err,
             router,
             router.asPath,
-            setValidationErrorMessages,
+            setValidationErrorMessages
           );
         });
     } catch (err) {
@@ -161,7 +168,9 @@ export default function SignUp() {
                 <FormControl fullWidth>
                   <DatePicker
                     label="生年月日"
-                    onChange={(e: Date) => setBirthDate(e as Date)}
+                    onChange={(e: Date | null) =>
+                      setBirthDate(e as Date | null)
+                    }
                     value={birthDate}
                     maxDate={new Date()}
                     openTo="year"
@@ -177,8 +186,8 @@ export default function SignUp() {
                     required
                     label="性別"
                     fullWidth
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setSex(e.target.value as sexType)
+                    onChange={(e: SelectChangeEvent<SexType>) =>
+                      setSex(e.target.value as SexType)
                     }
                   >
                     <MenuItem value={"male"}>男</MenuItem>

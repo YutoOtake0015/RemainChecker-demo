@@ -18,6 +18,9 @@ import BackLink from "../../../../components/BackLink";
 import PageHead from "../../../../components/PageHead";
 import ProtectRoute from "../../../../components/ProtectRoute";
 
+// types
+import { personType } from "../../../types/type";
+
 // MUI
 import {
   DataGrid,
@@ -28,18 +31,9 @@ import {
 } from "@mui/x-data-grid";
 import { Box, Button, Container } from "@mui/material";
 
-type personData = {
-  id: number;
-  name: string;
-  sex: string;
-  birthDate: string;
-  isAccountUser: boolean;
-  remainTime: number;
-};
-
 const Persons = () => {
   // 人物情報
-  const [persons, setPersons] = useState<personData[]>();
+  const [persons, setPersons] = useState<personType[] | null>(null);
 
   // 共有情報
   const user = useRecoilValue(userAtom);
@@ -65,7 +59,7 @@ const Persons = () => {
   const formatBirthDate = (params: GridRenderCellParams<any>) => {
     const formattedDate = format(
       new Date(params.row.birthDate),
-      "yyyy年MM月dd日",
+      "yyyy年MM月dd日"
     );
     return formattedDate;
   };

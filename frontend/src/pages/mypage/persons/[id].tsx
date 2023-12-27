@@ -3,19 +3,21 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 // state
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../../../../recoil/atom/userAtoms";
 import errMessagesAtom from "../../../../recoil/atom/errMessagesAtom";
 
 // library
 import apiClient from "../../../lib/apiClient";
-import { signout } from "../../../lib/authHelpers";
 import { handleErrorResponse } from "../../../lib/errorHandler";
 
 // components
 import BackLink from "../../../../components/BackLink";
 import PageHead from "../../../../components/PageHead";
 import ErrorMessageList from "../../../../components/ErrorMessageList";
+
+// types
+import { SexType } from "../../../types/type";
 
 // MUI
 import {
@@ -27,6 +29,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   TextField,
   Typography,
 } from "@mui/material";
@@ -34,8 +37,6 @@ import { DatePicker } from "@mui/x-date-pickers";
 
 // CSS
 import styles from "../../../styles/persons/personStyle.module.css";
-
-type sexType = "male" | "female";
 
 // サーバーサイドでのCookieの取得
 export const getServerSideProps = async ({ req, params }) => {
@@ -71,11 +72,11 @@ const PersonPage = ({ person }) => {
 
   // ユーザ情報
   const [personName, setPersonName] = useState<string>("");
-  const [sex, setSex] = useState<sexType | "">("");
-  const [birthDate, setBirthDate] = useState<Date>(null);
+  const [sex, setSex] = useState<SexType>(null);
+  const [birthDate, setBirthDate] = useState<Date | null>(null);
 
   // 共有情報
-  const [user, setUser] = useRecoilState(userAtom);
+  const user = useRecoilValue(userAtom);
   const [validationErrorMessages, setValidationErrorMessages] =
     useRecoilState(errMessagesAtom);
 
@@ -99,7 +100,7 @@ const PersonPage = ({ person }) => {
             err,
             router,
             "/mypage/persons",
-            setValidationErrorMessages,
+            setValidationErrorMessages
           );
         });
     } catch (err) {
@@ -114,7 +115,7 @@ const PersonPage = ({ person }) => {
       if (confirmed) {
         await apiClient
           .delete(`/persons/delete/${person.id}`, {
-            data: { userId: user.id },
+            data: { userId: user?.id },
           })
           .then((res) => {
             alert(res.data.message);
@@ -125,7 +126,7 @@ const PersonPage = ({ person }) => {
               err,
               router,
               router.asPath,
-              setValidationErrorMessages,
+              setValidationErrorMessages
             );
           });
       }
@@ -196,7 +197,9 @@ const PersonPage = ({ person }) => {
                         label="生年月日"
                         value={birthDate}
                         closeOnSelect={false}
-                        onChange={(e: Date) => setBirthDate(e as Date)}
+                        onChange={(e: Date | null) =>
+                          setBirthDate(e as Date | null)
+                        }
                         maxDate={new Date()}
                         openTo="year"
                         views={["year", "month", "day"]}
@@ -212,8 +215,8 @@ const PersonPage = ({ person }) => {
                         required
                         label="性別"
                         fullWidth
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          setSex(e.target.value as sexType)
+                        onChange={(e: SelectChangeEvent<SexType>) =>
+                          setSex(e.target.value as SexType)
                         }
                       >
                         <MenuItem value={"male"}>男</MenuItem>

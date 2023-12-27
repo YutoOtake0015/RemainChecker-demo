@@ -31,8 +31,8 @@ export default function SignIn() {
   const router = useRouter();
 
   // アカウント情報
-  const [email, setEmail] = useState<string>();
-  const [password, setPassword] = useState<string>();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   // 共有情報
   const setUser = useSetRecoilState(userAtom);

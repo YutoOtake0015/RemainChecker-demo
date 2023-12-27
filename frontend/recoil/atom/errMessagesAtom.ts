@@ -1,10 +1,12 @@
+// state
 import { atom } from "recoil";
 
-type errType = null | string[];
+// types
+import { errType } from "../../src/types/type";
 
 const errMessagesAtom = atom<errType>({
   key: "errMessagesAtom",
-  default: [],
+  default: null,
 });
 
 export default errMessagesAtom;

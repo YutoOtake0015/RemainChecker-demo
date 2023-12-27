@@ -11,12 +11,11 @@ import userAtom from "../../recoil/atom/userAtoms";
 import apiClient from "../lib/apiClient";
 import { signout } from "../lib/authHelpers";
 
+// types
+import { userType } from "../types/type";
+
 // MUI
 import { Box } from "@mui/material";
-
-interface AuthProviderProps {
-  children: ReactNode;
-}
 
 const clockStyle = {
   display: "flex",
@@ -25,11 +24,18 @@ const clockStyle = {
   height: "100vh",
 };
 
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const router = useRouter();
 
-  const [isLoading, setIsLoading] = useState(true);
-  const setUser = useSetRecoilState(userAtom);
+  // 共有情報
+  const setUser = useSetRecoilState<userType>(userAtom);
+
+  // ローディング状態
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
@@ -48,7 +54,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           })
           .catch(() => {
             alert(
-              "システムとの通信が切断されました。\nログインからやり直してください。",
+              "システムとの通信が切断されました。\nログインからやり直してください。"
             );
             signout(setUser, router);
           });

@@ -5,6 +5,9 @@ import { useRouter } from "next/router";
 // library
 import apiClient from "../src/lib/apiClient";
 
+// types
+import { RemainingLifeProps } from "../src/types/type";
+
 // MUI
 import { Box } from "@mui/material";
 
@@ -34,14 +37,7 @@ function timerReducer(state, action) {
   }
 }
 
-type personData = {
-  person: {
-    sex: string;
-    birthDate: Date;
-  };
-};
-
-const RemainingLife = React.memo(({ person }: personData) => {
+const RemainingLife = React.memo(({ person }: RemainingLifeProps) => {
   const router = useRouter();
   const [isExceeded, setIsExceeded] = useState<boolean>(false);
   const [state, dispatch] = useReducer(timerReducer, initialState);
@@ -54,7 +50,7 @@ const RemainingLife = React.memo(({ person }: personData) => {
         if (person) {
           // 寿命を取得
           const remainingLifeForSeconds = await getLifeSpanForSeconds(
-            person.sex,
+            person.sex
           );
 
           // 単位ごとに時間をセット

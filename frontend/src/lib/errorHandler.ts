@@ -1,6 +1,14 @@
-import { AxiosError } from "axios";
+// React & Next.js
 import { NextRouter } from "next/router";
+
+// state
 import { SetterOrUpdater } from "recoil";
+
+// library
+import { AxiosError } from "axios";
+
+// types
+import { errType } from "../types/type";
 
 // バリデーションエラーのメッセージ配列を追加
 interface CustomErrorResponse {
@@ -13,14 +21,14 @@ type handleErrorResponseType = (
   err: AxiosError<CustomErrorResponse>,
   router: NextRouter,
   redirectUrl: string,
-  setValidationErrorMessages: SetterOrUpdater<string[]>,
+  setValidationErrorMessages: SetterOrUpdater<errType>
 ) => void;
 
 export const handleErrorResponse: handleErrorResponseType = (
   err,
   router,
   redirectUrl,
-  setValidationErrorMessages,
+  setValidationErrorMessages
 ) => {
   if (!err.response) {
     alert("予期しないエラーが発生しました。\nもう一度やり直してください。");

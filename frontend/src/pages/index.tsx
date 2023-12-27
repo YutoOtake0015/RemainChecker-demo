@@ -14,6 +14,9 @@ import { format, differenceInYears } from "date-fns";
 import RemainingLife from "../../components/RemainingLife";
 import PageHead from "../../components/PageHead";
 
+// types
+import { SexType, userProfileType } from "../types/type";
+
 // MUI
 import {
   Box,
@@ -24,6 +27,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -32,13 +36,6 @@ import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
 // CSS
 import styles from "../styles/indexStyle.module.css";
 
-type sexType = "male" | "female";
-
-type personType = {
-  birthDate: Date;
-  sex: sexType;
-} | null;
-
 export default function Home() {
   const router = useRouter();
 
@@ -46,9 +43,9 @@ export default function Home() {
   const user = useRecoilValue(userAtom);
 
   // 人物情報
-  const [person, setPerson] = useState<personType>(null);
+  const [person, setPerson] = useState<userProfileType>(null);
   const [selectBirthDate, setSelectBirthDate] = useState<Date | null>(null);
-  const [selectSex, setSelectSex] = useState<sexType | "">("");
+  const [selectSex, setSelectSex] = useState<SexType>(null);
   const [remainingLifeKey, setRemainingLifeKey] = useState<number>(0);
 
   // 年齢算出
@@ -94,7 +91,7 @@ export default function Home() {
 
       // 初期化
       setSelectBirthDate(null);
-      setSelectSex("");
+      setSelectSex(null);
 
       // 再作成したRemainingLifeコンポーネントのkeyを更新
       setRemainingLifeKey((prevKey) => prevKey + 1);
@@ -105,7 +102,7 @@ export default function Home() {
 
   const handleReset = () => {
     setSelectBirthDate(null);
-    setSelectSex("");
+    setSelectSex(null);
     setPerson(null);
     setRemainingLifeKey(0);
   };
@@ -116,7 +113,7 @@ export default function Home() {
     } else {
       setPerson({
         birthDate: new Date(user.birthDate),
-        sex: user.sex as sexType,
+        sex: user.sex as SexType,
       });
     }
   }, [user]);
@@ -209,7 +206,9 @@ export default function Home() {
                       <FormControl fullWidth>
                         <DatePicker
                           label="生年月日"
-                          onChange={(e: Date) => setSelectBirthDate(e as Date)}
+                          onChange={(e: Date | null) =>
+                            setSelectBirthDate(e as Date | null)
+                          }
                           value={selectBirthDate}
                           maxDate={new Date()}
                           openTo="year"
@@ -224,8 +223,8 @@ export default function Home() {
                           value={selectSex}
                           required
                           label="性別"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setSelectSex(e.target.value as sexType)
+                          onChange={(e: SelectChangeEvent<SexType>) =>
+                            setSelectSex(e.target.value as SexType)
                           }
                         >
                           <MenuItem value={"male"}>男</MenuItem>

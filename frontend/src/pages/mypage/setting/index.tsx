@@ -12,6 +12,9 @@ import apiClient from "../../../lib/apiClient";
 import { signout } from "../../../lib/authHelpers";
 import { handleErrorResponse } from "../../../lib/errorHandler";
 
+// types
+import { errType, userType } from "../../../types/type";
+
 // components
 import BackLink from "../../../../components/BackLink";
 import PageHead from "../../../../components/PageHead";
@@ -37,20 +40,20 @@ const Setting = () => {
 
   // アカウント情報
   const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string | null>("");
+  const [password, setPassword] = useState<string>("");
 
   // 共有情報
-  const [user, setUser] = useRecoilState(userAtom);
+  const [user, setUser] = useRecoilState<userType>(userAtom);
   const [validationErrorMessages, setValidationErrorMessages] =
-    useRecoilState(errMessagesAtom);
+    useRecoilState<errType>(errMessagesAtom);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
       await apiClient
         .post("/users/update", {
-          id: user.id,
+          id: user?.id,
           email,
           password,
         })
@@ -63,7 +66,7 @@ const Setting = () => {
             err,
             router,
             router.asPath,
-            setValidationErrorMessages,
+            setValidationErrorMessages
           );
         });
     } catch (err) {
@@ -79,7 +82,7 @@ const Setting = () => {
         await apiClient
           .delete("/users/delete/", {
             data: {
-              id: user.id,
+              id: user?.id,
             },
           })
           .then(() => {

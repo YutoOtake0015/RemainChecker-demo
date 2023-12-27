@@ -17,6 +17,9 @@ import PageHead from "../../../../components/PageHead";
 import ProtectRoute from "../../../../components/ProtectRoute";
 import ErrorMessageList from "../../../../components/ErrorMessageList";
 
+// types
+import { SexType } from "../../../types/type";
+
 // MUI
 import {
   Box,
@@ -27,6 +30,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   TextField,
   Typography,
 } from "@mui/material";
@@ -35,15 +39,13 @@ import { DatePicker } from "@mui/x-date-pickers";
 // CSS
 import styles from "../../../styles/persons/createStyle.module.css";
 
-type sexType = "male" | "female";
-
 const CreatePersonData = () => {
   const router = useRouter();
 
   // ユーザ情報
-  const [personName, setPersonName] = useState<string>();
-  const [sex, setSex] = useState<sexType | "">("");
-  const [birthDate, setBirthDate] = useState<Date>(null);
+  const [personName, setPersonName] = useState<string>("");
+  const [sex, setSex] = useState<SexType>(null);
+  const [birthDate, setBirthDate] = useState<Date | null>(null);
 
   // 共有情報
   const user = useRecoilValue(userAtom);
@@ -60,7 +62,7 @@ const CreatePersonData = () => {
           personName,
           birthDate,
           sex,
-          userId: user.id,
+          userId: user?.id,
         })
         .then(() => {
           router.push("/mypage/persons");
@@ -70,7 +72,7 @@ const CreatePersonData = () => {
             err,
             router,
             "/mypage/persons",
-            setValidationErrorMessages,
+            setValidationErrorMessages
           );
         });
     } catch (err) {
@@ -87,7 +89,7 @@ const CreatePersonData = () => {
           err,
           router,
           "/mypage/persons",
-          setValidationErrorMessages,
+          setValidationErrorMessages
         );
       });
     };
@@ -137,7 +139,9 @@ const CreatePersonData = () => {
                   <FormControl fullWidth>
                     <DatePicker
                       label="生年月日"
-                      onChange={(e: Date) => setBirthDate(e as Date)}
+                      onChange={(e: Date | null) =>
+                        setBirthDate(e as Date | null)
+                      }
                       value={birthDate}
                       maxDate={new Date()}
                       openTo="year"
@@ -153,8 +157,8 @@ const CreatePersonData = () => {
                       required
                       label="性別"
                       fullWidth
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setSex(e.target.value as sexType)
+                      onChange={(e: SelectChangeEvent<SexType>) =>
+                        setSex(e.target.value as SexType)
                       }
                     >
                       <MenuItem value={"male"}>男</MenuItem>
