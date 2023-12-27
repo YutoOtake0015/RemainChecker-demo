@@ -6,11 +6,16 @@ import { useRouter } from "next/router";
 import { useSetRecoilState } from "recoil";
 import errMessagesAtom from "../recoil/atom/errMessagesAtom";
 
+// types
+import { errType } from "../src/types/type";
+
 interface ClearErrorMessagesProps {
   children: ReactNode;
 }
+
 const ClearErrorMessages = ({ children }: ClearErrorMessagesProps) => {
-  const setValidationErrorMessages = useSetRecoilState(errMessagesAtom);
+  const setValidationErrorMessages =
+    useSetRecoilState<errType>(errMessagesAtom);
   const router = useRouter();
 
   useEffect(() => {

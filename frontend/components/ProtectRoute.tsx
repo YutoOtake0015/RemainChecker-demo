@@ -2,13 +2,8 @@
 import React, { ReactNode } from "react";
 import { useRouter } from "next/router";
 
-type userType = null | {
-  id: number;
-  username: string;
-  email: string;
-  sex: string;
-  birthDate: string;
-};
+// types
+import { userType } from "../src/types/type";
 
 const ProtectRoute: React.FC<{ user: userType; children: ReactNode }> = ({
   user,

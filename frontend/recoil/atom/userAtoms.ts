@@ -1,12 +1,8 @@
+// state
 import { atom } from "recoil";
 
-type userType = null | {
-  id: number;
-  username: string;
-  email: string;
-  sex: string;
-  birthDate: string;
-};
+// types
+import { userType } from "../../src/types/type";
 
 const userAtom = atom<userType>({
   key: "userAtom",

@@ -14,19 +14,15 @@ import { format, differenceInYears } from "date-fns";
 import RemainingLife from "../../../components/RemainingLife";
 import PageHead from "../../../components/PageHead";
 
+// types
+import { SexType, userProfileType } from "../../types/type";
+
 // MUI
 import { Box, Button, Container, Typography } from "@mui/material";
 import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
 
 // CSS
 import styles from "../../styles/indexStyle.module.css";
-
-type sexType = "male" | "female";
-
-type personType = {
-  birthDate: Date;
-  sex: sexType;
-} | null;
 
 export default function Home() {
   const router = useRouter();
@@ -35,68 +31,12 @@ export default function Home() {
   const user = useRecoilValue(userAtom);
 
   // 人物情報
-  const [person, setPerson] = useState<personType>(null);
-  const [selectBirthDate, setSelectBirthDate] = useState<Date | null>(null);
-  const [selectSex, setSelectSex] = useState<sexType | "">("");
-  const [remainingLifeKey, setRemainingLifeKey] = useState<number>(0);
+  const [person, setPerson] = useState<userProfileType>(null);
 
   // 年齢算出
   const calculateAge = (birthDate: Date) => {
     const currentDate = new Date();
     return differenceInYears(currentDate, birthDate);
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    try {
-      if (!selectBirthDate || !selectSex) {
-        return alert("情報を設定してください");
-      }
-
-      // バリデーション
-      const currentDate = new Date(new Date().toDateString());
-      const minBirthDate = new Date(new Date("1900-01-01").toDateString());
-
-      // 生年月日：形式確認
-      if (isNaN(selectBirthDate.getTime())) {
-        return alert("正しい生年月日を入力してください");
-      }
-
-      // 生年月日：範囲確認
-      const sanitizedBirthDate = new Date(selectBirthDate.toDateString()); // 比較のために時刻をクリア
-      if (
-        sanitizedBirthDate < minBirthDate ||
-        currentDate < sanitizedBirthDate
-      ) {
-        return alert("生年月日が範囲外です（1900年1月1日〜本日）");
-      }
-
-      // 性別：値確認
-      if (selectSex !== "male" && selectSex !== "female") {
-        return alert("性別を選択してください（maleまたはfemale）");
-      }
-
-      setPerson({
-        birthDate: selectBirthDate,
-        sex: selectSex,
-      });
-
-      // 初期化
-      setSelectBirthDate(null);
-      setSelectSex("");
-
-      // 再作成したRemainingLifeコンポーネントのkeyを更新
-      setRemainingLifeKey((prevKey) => prevKey + 1);
-    } catch (err) {
-      router.push("/");
-    }
-  };
-
-  const handleReset = () => {
-    setSelectBirthDate(null);
-    setSelectSex("");
-    setPerson(null);
-    setRemainingLifeKey(0);
   };
 
   useEffect(() => {
@@ -105,7 +45,7 @@ export default function Home() {
     } else {
       setPerson({
         birthDate: new Date(user.birthDate),
-        sex: user.sex as sexType,
+        sex: user.sex as SexType,
       });
     }
   }, [user]);
@@ -174,7 +114,7 @@ export default function Home() {
                   あなたに残された時間
                 </Typography>
                 <Box className={styles.remainingLife}>
-                  <RemainingLife key={remainingLifeKey} person={person} />
+                  <RemainingLife person={person} />
                 </Box>
               </Box>
             </>

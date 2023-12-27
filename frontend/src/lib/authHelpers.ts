@@ -8,17 +8,12 @@ import { SetterOrUpdater } from "recoil";
 import apiClient from "./apiClient";
 import { handleErrorResponse } from "./errorHandler";
 
-type userType = null | {
-  id: number;
-  username: string;
-  email: string;
-  sex: string;
-  birthDate: string;
-};
+// types
+import { errType, userType } from "../types/type";
 
 export const fetchUser = async (
   setUser: SetterOrUpdater<userType>,
-  setValidationErrorMessages: SetterOrUpdater<string[]>,
+  setValidationErrorMessages: SetterOrUpdater<errType>,
   router: NextRouter
 ) => {
   try {
