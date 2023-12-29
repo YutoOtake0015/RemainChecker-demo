@@ -1,4 +1,5 @@
-const Joi = require("joi");
+// modules
+import Joi from "joi";
 
 const editPersonSchema = Joi.object({
   params: Joi.object({
@@ -7,7 +8,12 @@ const editPersonSchema = Joi.object({
       "number.base": "有効なIDを指定してください",
     }),
   }),
+
   body: Joi.object({
+    userId: Joi.number()
+      .required()
+      .messages({ "any.required": "ユーザ情報が不正です" }),
+
     personName: Joi.string().trim().required().max(15).messages({
       "any.required": "名前を入力してください",
       "string.empty": "名前を入力してください",
@@ -28,8 +34,9 @@ const editPersonSchema = Joi.object({
     sex: Joi.string().trim().required().messages({
       "any.required": "性別を指定してください",
       "string.empty": "性別を指定してください",
+      "string.base": "性別を指定してください",
     }),
   }),
 });
 
-module.exports = editPersonSchema;
+export default editPersonSchema;

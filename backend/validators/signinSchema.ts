@@ -1,4 +1,5 @@
-const Joi = require("joi");
+// modules
+import Joi from "joi";
 
 const signinSchema = Joi.object({
   email: Joi.string().trim().required().messages({
@@ -14,4 +15,4 @@ const signinSchema = Joi.object({
   }),
 });
 
-module.exports = signinSchema;
+export default signinSchema;

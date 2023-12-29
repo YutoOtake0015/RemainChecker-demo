@@ -1,10 +1,13 @@
+// modules
 require("dotenv").config();
-const cors = require("cors");
-const express = require("express");
-const lifeRoute = require("./routers/life");
-const authRoute = require("./routers/auth");
-const usersRoute = require("./routers/users");
-const personsRoute = require("./routers/persons");
+import cors from "cors";
+import express from "express";
+
+// routes
+import lifeRoute from "./routers/life";
+import authRoute from "./routers/auth";
+import usersRoute from "./routers/users";
+import personsRoute from "./routers/persons";
 
 const app = express();
 
@@ -17,6 +20,7 @@ const corsOptions = {
   credentials: true,
 };
 
+// middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));

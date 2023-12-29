@@ -1,4 +1,5 @@
-const Joi = require("joi");
+// modules
+import Joi from "joi";
 
 const createPersonSchema = Joi.object({
   personName: Joi.string().trim().required().max(15).messages({
@@ -17,6 +18,7 @@ const createPersonSchema = Joi.object({
   sex: Joi.string().trim().required().messages({
     "any.required": "性別を指定してください",
     "string.empty": "性別を指定してください",
+    "string.base": "性別を指定してください",
   }),
 
   userId: Joi.number().required().messages({
@@ -25,4 +27,4 @@ const createPersonSchema = Joi.object({
   }),
 });
 
-module.exports = createPersonSchema;
+export default createPersonSchema;
