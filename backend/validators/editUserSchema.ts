@@ -1,8 +1,9 @@
-const Joi = require("joi");
+// modules
+import Joi from "joi";
 
 const pattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,10}$/;
 const editUserSchema = Joi.object({
-  id: Joi.number()
+  userId: Joi.number()
     .required()
     .messages({ "any.required": "ユーザ情報が不正です" }),
 
@@ -20,4 +21,4 @@ const editUserSchema = Joi.object({
   }),
 });
 
-module.exports = editUserSchema;
+export default editUserSchema;

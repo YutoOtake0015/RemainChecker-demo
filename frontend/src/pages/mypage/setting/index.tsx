@@ -53,7 +53,6 @@ const Setting = () => {
     try {
       await apiClient
         .post("/users/update", {
-          id: user?.id,
           email,
           password,
         })

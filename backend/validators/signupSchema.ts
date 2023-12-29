@@ -1,4 +1,5 @@
-const Joi = require("joi");
+// modules
+import Joi from "joi";
 
 const pattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,10}$/;
 const signupSchema = Joi.object({
@@ -31,7 +32,8 @@ const signupSchema = Joi.object({
   sex: Joi.string().trim().required().messages({
     "any.required": "性別を指定してください",
     "string.empty": "性別を指定してください",
+    "string.base": "性別を指定してください",
   }),
 });
 
-module.exports = signupSchema;
+export default signupSchema;

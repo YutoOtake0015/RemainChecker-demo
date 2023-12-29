@@ -1,14 +1,18 @@
-const router = require("express").Router();
-const { PrismaClient } = require("@prisma/client");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const signupSchema = require("../validators/signupSchema");
-const signinSchema = require("../validators/signinSchema");
-const isAuthenticated = require("../middlewares/isAuthenticated");
+// modules
+require("dotenv").config();
+import express, { Request, Response } from "express";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
+// validators
+import signupSchema from "../validators/signupSchema";
+import signinSchema from "../validators/signinSchema";
+
+const router = express.Router();
 const prisma = new PrismaClient();
 
-router.post("/signup", async (req, res) => {
+router.post("/signup", async (req: Request, res: Response) => {
   try {
     // バリデーション
     const { error, value } = signupSchema.validate(req.body, {
@@ -60,7 +64,13 @@ router.post("/signup", async (req, res) => {
       .status(200)
       .json({ message: "ユーザが正常に作成されました", user });
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    if (err instanceof Error) {
+      // Errorオブジェクトの場合
+      return res.status(500).json({ message: err.message });
+    } else {
+      // それ以外の場合
+      return res.status(500).json({ message: "不明なエラーが発生しました" });
+    }
   }
 });
 
@@ -92,6 +102,11 @@ router.post("/signin", async (req, res) => {
       return res.status(401).json({ message: "パスワードに誤りがあります" });
     }
 
+    // JWT_SECRET_KEYの存在確認
+    if (!process.env.JWT_SECRET_KEY) {
+      throw new Error("JWT_SECRET_KEY is not defined in .env file");
+    }
+
     // 認証token生成
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY, {
       expiresIn: "1d",
@@ -108,7 +123,11 @@ router.post("/signin", async (req, res) => {
 
     return res.status(200).json({ message: "ログイン成功" });
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    if (err instanceof Error) {
+      return res.status(500).json({ message: err.message });
+    } else {
+      return res.status(500).json({ message: "不明なエラーが発生しました" });
+    }
   }
 });
 
@@ -125,4 +144,4 @@ router.get("/clearCookie", async (req, res) => {
   return res.status(200).json({ message: "Cooki削除成功" });
 });
 
-module.exports = router;
+export default router;
