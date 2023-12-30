@@ -14,7 +14,7 @@ import { errType, userType } from "../types/type";
 export const fetchUser = async (
   setUser: SetterOrUpdater<userType>,
   setValidationErrorMessages: SetterOrUpdater<errType>,
-  router: NextRouter
+  router: NextRouter,
 ) => {
   try {
     // サインイン時、ユーザーをセット
@@ -28,7 +28,7 @@ export const fetchUser = async (
           err,
           router,
           router.asPath,
-          setValidationErrorMessages
+          setValidationErrorMessages,
         );
         signout(setUser, router);
       });
