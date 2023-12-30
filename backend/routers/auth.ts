@@ -74,7 +74,7 @@ router.post("/signup", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/signin", async (req, res) => {
+router.post("/signin", async (req: Request, res: Response) => {
   try {
     // バリデーション
     const { error, value } = signinSchema.validate(req.body, {
@@ -131,13 +131,14 @@ router.post("/signin", async (req, res) => {
   }
 });
 
-router.get("/clearCookie", async (req, res) => {
+router.get("/clearCookie", async (req: Request, res: Response) => {
   // Cookieの削除のレスポンスを生成
   res.clearCookie("auth_token", {
     httpOnly: true,
     secure: true,
     sameSite: "none",
     path: "/",
+    domain: process.env.COOKIE_DOMAIN ? process.env.COOKIE_DOMAIN : "",
   });
 
   // ログイン画面にリダイレクト
