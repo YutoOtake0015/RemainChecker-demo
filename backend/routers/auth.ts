@@ -180,18 +180,4 @@ router.post("/createAuthToken", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/clearCookie", async (req: Request, res: Response) => {
-  // Cookieの削除のレスポンスを生成
-  res.clearCookie("auth_token", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-    path: "/",
-    domain: process.env.COOKIE_DOMAIN ? process.env.COOKIE_DOMAIN : "",
-  });
-
-  // ログイン画面にリダイレクト
-  return res.status(200).json({ message: "Cooki削除成功" });
-});
-
 export default router;
