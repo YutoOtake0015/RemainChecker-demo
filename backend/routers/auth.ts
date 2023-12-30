@@ -138,6 +138,7 @@ router.get("/clearCookie", async (req, res) => {
     secure: true,
     sameSite: "none",
     path: "/",
+    domain: process.env.COOKIE_DOMAIN ? process.env.COOKIE_DOMAIN : "",
   });
 
   // ログイン画面にリダイレクト
