@@ -16,7 +16,7 @@
  - 意味のある日々を過ごしたい人
 
 # サイトURL
-https://remain-checker.vercel.app/ 　<br >
+https://remain-checker.com<br >
 
 ## ゲストログイン
 トップページでログインボタンを押下して遷移したログイン画面で以下の値を入力してください。
