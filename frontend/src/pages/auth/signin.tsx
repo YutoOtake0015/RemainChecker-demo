@@ -31,8 +31,8 @@ export default function SignIn() {
   const router = useRouter();
 
   // アカウント情報
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>();
+  const [password, setPassword] = useState<string>();
 
   // 共有情報
   const setUser = useSetRecoilState(userAtom);
@@ -44,12 +44,36 @@ export default function SignIn() {
     try {
       // サインインAPIを実行
       await apiClient
-        .post("/auth/signin", {
+        .post("/auth/createAuthToken", {
           email,
           password,
         })
-        .then(() => {
-          fetchUser(setUser, setValidationErrorMessages, router);
+        .then(async (res) => {
+          // 認証tokenを取得
+          const token = res.data.token;
+
+          // Cookieをセット
+          const resSetCookie = await fetch("/api/setCookie", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token }),
+          }).catch(() => {
+            return null;
+          });
+
+          // 応答を処理
+          // resSetCookieが存在しない、もしくはエラーステータスの場合
+          if (!resSetCookie || resSetCookie.status !== 200) {
+            throw new Error(
+              resSetCookie?.statusText || "Cookieの設定に失敗しました",
+            );
+          }
+
+          // userセット
+          await fetchUser(setUser, setValidationErrorMessages, router);
+
           router.push("/mypage");
         })
         .catch((err) => {
@@ -57,10 +81,10 @@ export default function SignIn() {
             err,
             router,
             router.asPath,
-            setValidationErrorMessages
+            setValidationErrorMessages,
           );
         });
-    } catch (error) {
+    } catch (err) {
       alert("予期しないエラーが発生しました。\nもう一度やり直してください。");
     }
   };
