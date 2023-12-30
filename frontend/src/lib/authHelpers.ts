@@ -40,7 +40,7 @@ export const fetchUser = async (
 
 export const signout = async (setUser, router) => {
   // Cookie削除
-  await apiClient.get("/auth/clearCookie");
+  await fetch("/api/clearCookie");
 
   // ユーザ情報削除
   setUser(null);
