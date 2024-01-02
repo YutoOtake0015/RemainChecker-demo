@@ -35,7 +35,7 @@ https://remain-checker.com<br >
 |              | TypeScript     | 5.2.2          |
 |              | React          | 18.2.0         |
 |              | Next.js        | 14.0.0         |
-| **バックエンド**  | JavaScript     | -              |
+| **バックエンド**  | TypeScript     | 5.3.3          |
 |              | Node.js        | 20.8.0         |
 |              | Express        | 4.18.2         |
 |              | Prisma         | 5.5.2          |
