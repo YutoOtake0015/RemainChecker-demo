@@ -1,6 +1,7 @@
 // React & Next.js
 import React, { useState, useEffect, useReducer, useRef } from "react";
 import { useRouter } from "next/router";
+import { ClipLoader } from "react-spinners";
 
 // library
 import apiClient from "../src/lib/apiClient";
@@ -37,20 +38,31 @@ function timerReducer(state, action) {
   }
 }
 
+const clipStyle = {
+  display: "flex",
+  alignItems: "start",
+  justifyContent: "center",
+  height: "100vh",
+};
+
 const RemainingLife = React.memo(({ person }: RemainingLifeProps) => {
   const router = useRouter();
   const [isExceeded, setIsExceeded] = useState<boolean>(false);
   const [state, dispatch] = useReducer(timerReducer, initialState);
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
 
+  // ローディング状態
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         if (person) {
           // 寿命を取得
           const remainingLifeForSeconds = await getLifeSpanForSeconds(
-            person.sex
+            person.sex,
           );
 
           // 単位ごとに時間をセット
@@ -60,6 +72,8 @@ const RemainingLife = React.memo(({ person }: RemainingLifeProps) => {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -148,6 +162,14 @@ const RemainingLife = React.memo(({ person }: RemainingLifeProps) => {
     }
     return value.toString().padStart(2, "0");
   };
+
+  if (isLoading) {
+    return (
+      <Box sx={{ display: "flex", textAlign: "center", ...clipStyle }}>
+        <ClipLoader size={50} color={"#000000"} speedMultiplier={1} />
+      </Box>
+    );
+  }
 
   return (
     <>

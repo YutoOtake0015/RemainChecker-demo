@@ -21,6 +21,9 @@ import ProtectRoute from "../../../../components/ProtectRoute";
 // types
 import { personType } from "../../../types/type";
 
+// state
+import { useLoading } from "../../../hooks/useLoading";
+
 // MUI
 import {
   DataGrid,
@@ -41,15 +44,25 @@ const Persons = () => {
   // ソート設定
   const [sortModel, setSortModel] = useState<GridSortModel>([]);
 
+  // ローディング状態
+  const { startLoading, stopLoading } = useLoading();
+
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     const setPersonData = async () => {
+      startLoading();
       if (user) {
         // ユーザに紐づく登録人物の情報を取得
-        const personsData = await apiClient.get("/persons/findAll", {
-          data: { userId: user.id },
-        });
-
-        setPersons(personsData.data.formattedPersons);
+        await apiClient
+          .get("/persons/findAll", {
+            data: { userId: user.id },
+          })
+          .then((res) => {
+            setPersons(res.data.formattedPersons);
+          })
+          .finally(() => {
+            stopLoading();
+          });
       }
     };
     setPersonData();
@@ -59,7 +72,7 @@ const Persons = () => {
   const formatBirthDate = (params: GridRenderCellParams<any>) => {
     const formattedDate = format(
       new Date(params.row.birthDate),
-      "yyyy年MM月dd日"
+      "yyyy年MM月dd日",
     );
     return formattedDate;
   };
@@ -124,7 +137,11 @@ const Persons = () => {
       flex: 0.3,
       renderCell: (params: GridRenderCellParams<any>) => (
         <>
-          <Link className="text-blue-400" href={`/mypage/persons/${params.id}`}>
+          <Link
+            className="text-blue-400"
+            href={`/mypage/persons/${params.id}`}
+            onClick={() => startLoading()}
+          >
             編集
           </Link>
         </>

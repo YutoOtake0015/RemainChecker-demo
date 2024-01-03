@@ -12,6 +12,7 @@ import { ja } from "date-fns/locale";
 // components
 import Navbar from "../../components/Navbar";
 import ClearErrorMessages from "../../components/ClearErrorMessages";
+import LoadingIndicator from "../../components/LoadingIndicator";
 
 // MUI
 import { CssBaseline } from "@mui/material";
@@ -22,6 +23,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
       <ClearErrorMessages>
+        <LoadingIndicator />
         <AuthProvider>
           <Navbar />
           <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={ja}>
