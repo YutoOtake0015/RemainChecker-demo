@@ -93,6 +93,7 @@ npm install
 4. frontendディレクトリに直下に`.env.local`ファイルを作成し、以下環境変数を記述する。
 ```
 NEXT_PUBLIC_API_BASEURL="http://localhost:(使用していないPORT)/api"
+COOKIE_DOMAIN="localhost"
 ```
 **注**："(使用していないPORT)" の部分は、実際に使用していないポート番号に置き換えてください。
 
