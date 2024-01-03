@@ -3,9 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 // state
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import userAtom from "../../../../recoil/atom/userAtoms";
-import errMessagesAtom from "../../../../recoil/atom/errMessagesAtom";
 
 // library
 import apiClient from "../../../lib/apiClient";
@@ -41,79 +40,67 @@ import { DatePicker } from "@mui/x-date-pickers";
 // CSS
 import styles from "../../../styles/persons/personStyle.module.css";
 
-// サーバーサイドでのCookieの取得
-export const getServerSideProps = async ({ req, params }) => {
-  try {
-    const { id } = params;
-
-    // req.headers.cookie からCookieを取得
-    const token = req.headers.cookie ? req.headers.cookie : null;
-
-    // APIリクエストを非同期で実行
-    const response = await apiClient.get(`/persons/find/${id}`, {
-      headers: {
-        cookie: token,
-      },
-    });
-
-    // レスポンスデータをpropsとして返却
-    return {
-      props: {
-        person: response.data.person,
-      },
-    };
-  } catch (err) {
-    // エラーが発生した場合、propsを空のオブジェクトとして返却
-    return {
-      props: {},
-    };
-  }
-};
-
-const PersonPage = ({ person }) => {
+const PersonPage = () => {
   const router = useRouter();
-
-  // ユーザ情報
-  const [personName, setPersonName] = useState<string>("");
-  const [sex, setSex] = useState<SexType>("");
-  const [birthDate, setBirthDate] = useState<Date | null>(null);
+  const { id } = router.query;
 
   // 共有情報
   const user = useRecoilValue(userAtom);
-  const [validationErrorMessages, setValidationErrorMessages] =
-    useRecoilState(errMessagesAtom);
+  const [validationErrorMessages, setValidationErrorMessages] = useState([]);
+
+  // 人物情報
+  const [person, setPerson] = useState(null);
+  const [birthDate, setBirthDate] = useState<Date | null>(null);
+  const [personName, setPersonName] = useState("");
+  const [sex, setSex] = useState<SexType>("");
 
   // ローディング状態
-  const { stopLoading } = useLoading();
+  const { startLoading, stopLoading } = useLoading();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const token = "token";
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    const fetchPerson = async () => {
+      startLoading();
+      try {
+        const response = await apiClient.get(`/persons/find/${id}`);
+        setPerson(response.data.person);
+        setPersonName(response.data.person.personName);
+        setSex(response.data.person.sex);
+        setBirthDate(new Date(response.data.person.birthDate));
+      } catch (error) {
+        setValidationErrorMessages(["人物情報の取得に失敗しました。"]);
+      } finally {
+        stopLoading();
+      }
+    };
+
+    if (id) {
+      fetchPerson();
+    }
+  }, [id]);
+
+  // 情報更新
+  const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    startLoading();
     try {
-      // 人物情報編集APIを実行
-      await apiClient
-        .post(`/persons/edit/${person.id}`, {
-          personName,
-          birthDate,
-          sex,
-        })
-        .then((res) => {
-          alert(res.data.message);
-          router.back();
-        })
-        .catch((err) => {
-          handleErrorResponse(
-            err,
-            router,
-            "/mypage/persons",
-            setValidationErrorMessages,
-          );
-        });
-    } catch (err) {
-      alert("入力内容が正しくありません");
+      await apiClient.post(`/persons/edit/${id}`, {
+        personName,
+        sex,
+        birthDate,
+      });
+      alert("人物情報を更新しました。");
+      router.push("/mypage/persons");
+    } catch (error) {
+      console.error("エラーが発生しました: ", error);
+      setValidationErrorMessages(["人物情報の更新に失敗しました。"]);
+    } finally {
+      stopLoading();
     }
   };
 
+  // 情報削除
   const handleDeletePerson = async () => {
     try {
       // 削除確認
@@ -141,20 +128,10 @@ const PersonPage = ({ person }) => {
     }
   };
 
-  /* eslint-disable react-hooks/exhaustive-deps */
-  useEffect(() => {
-    if (person) {
-      setPersonName(person.personName);
-      setSex(person.sex);
-      setBirthDate(new Date(person.birthDate));
-      stopLoading();
-    } else {
-      // 人物情報が利用できない場合の処理
-      alert("人物情報を取得できませんでした");
-      router.back();
-      stopLoading();
-    }
-  }, []);
+  // 人物情報取得まで待機
+  if (!person) {
+    return null;
+  }
 
   return (
     <>
@@ -174,7 +151,7 @@ const PersonPage = ({ person }) => {
               <Box
                 component="form"
                 noValidate
-                onSubmit={handleSubmit}
+                onSubmit={handleUpdate}
                 sx={{ mt: 3 }}
               >
                 <Grid container spacing={2}>
