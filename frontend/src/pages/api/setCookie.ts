@@ -26,11 +26,13 @@ export default async function handler(
     // Cookieの登録
     setCookie({ res }, "auth_token", token, {
       httpOnly: true,
-      secure: process.env.NODE_SECURE === "true",
-      sameSite: process.env.NODE_SAMESITE,
+      secure: process.env.NEXT_PUBLIC_COOKIE_SECURE === "true",
+      sameSite: process.env.NEXT_PUBLIC_COOKIE_SAMESITE,
       maxAge: 365 * 24 * 60 * 60,
       path: "/",
-      domain: process.env.COOKIE_DOMAIN ? process.env.COOKIE_DOMAIN : "",
+      domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN
+        ? process.env.NEXT_PUBLIC_COOKIE_DOMAIN
+        : "",
     });
 
     return res.status(200).json({ message: "ログイン成功" });
