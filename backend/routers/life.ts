@@ -37,16 +37,22 @@ router.get("/lifespan", async (req: Request, res: Response) => {
   // 年齢を秒で算出
   const ageInSeconds = currentDateTimeInSeconds - birthDateInSeconds;
 
-  // 平均寿命を取得→秒に変換
-  const currentYear = new Date().getFullYear();
-  const lifespan = await prisma.averageLife.findUnique({
-    where: { sex_year: { sex, year: String(currentYear - 1) } },
+  // 平均寿命取得
+  const lifespan = await prisma.averageLife.findFirst({
+    where: {
+      sex: sex,
+    },
+    orderBy: {
+      year: "desc",
+    },
   });
 
   // 平均寿命未取得の場合、0を返却
   if (!lifespan) {
     return res.json({ remainTime: 0 });
   }
+
+  // 平均寿命取得後、秒に変換
   const averageLifespan = lifespan.age;
   const averageLifespanInSeconds = ageToSeconds(averageLifespan);
 
