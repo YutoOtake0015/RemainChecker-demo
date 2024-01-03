@@ -45,7 +45,7 @@ export default function Home() {
   // 人物情報
   const [person, setPerson] = useState<userProfileType>(null);
   const [selectBirthDate, setSelectBirthDate] = useState<Date | null>(null);
-  const [selectSex, setSelectSex] = useState<SexType>(null);
+  const [selectSex, setSelectSex] = useState<SexType>("");
   const [remainingLifeKey, setRemainingLifeKey] = useState<number>(0);
 
   // 年齢算出
@@ -102,7 +102,7 @@ export default function Home() {
 
   const handleReset = () => {
     setSelectBirthDate(null);
-    setSelectSex(null);
+    setSelectSex("");
     setPerson(null);
     setRemainingLifeKey(0);
   };

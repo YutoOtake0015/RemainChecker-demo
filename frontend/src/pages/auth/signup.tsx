@@ -18,6 +18,9 @@ import ErrorMessageList from "../../../components/ErrorMessageList";
 // types
 import { SexType } from "../../types/type";
 
+// hooks
+import { useLoading } from "../../hooks/useLoading";
+
 // MUI
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -46,14 +49,19 @@ export default function SignUp() {
   const [password, setPassword] = useState<string>("");
 
   // 人物情報
-  const [sex, setSex] = useState<SexType>(null);
+  const [sex, setSex] = useState<SexType>("");
   const [birthDate, setBirthDate] = useState<Date | null>(null);
 
   // 共有情報
   const [validationErrorMessages, setValidationErrorMessages] =
     useRecoilState(errMessagesAtom);
 
+  // ローディング状態
+  const { startLoading, stopLoading } = useLoading();
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    startLoading();
+
     event.preventDefault();
     try {
       // アカウント新規登録APIを実行
@@ -73,11 +81,15 @@ export default function SignUp() {
             err,
             router,
             router.asPath,
-            setValidationErrorMessages
+            setValidationErrorMessages,
           );
+        })
+        .finally(() => {
+          stopLoading();
         });
     } catch (err) {
       alert("予期しないエラーが発生しました。\nもう一度やり直してください。");
+      stopLoading();
     }
   };
 

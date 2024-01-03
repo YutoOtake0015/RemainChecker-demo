@@ -83,7 +83,8 @@ export default function SignIn() {
             router.asPath,
             setValidationErrorMessages,
           );
-        });
+        })
+        .finally(() => {});
     } catch (err) {
       alert("予期しないエラーが発生しました。\nもう一度やり直してください。");
     }

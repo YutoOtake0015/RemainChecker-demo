@@ -19,6 +19,9 @@ import ErrorMessageList from "../../../../components/ErrorMessageList";
 // types
 import { SexType } from "../../../types/type";
 
+// hooks
+import { useLoading } from "../../../hooks/useLoading";
+
 // MUI
 import {
   Box,
@@ -72,13 +75,16 @@ const PersonPage = ({ person }) => {
 
   // ユーザ情報
   const [personName, setPersonName] = useState<string>("");
-  const [sex, setSex] = useState<SexType>(null);
+  const [sex, setSex] = useState<SexType>("");
   const [birthDate, setBirthDate] = useState<Date | null>(null);
 
   // 共有情報
   const user = useRecoilValue(userAtom);
   const [validationErrorMessages, setValidationErrorMessages] =
     useRecoilState(errMessagesAtom);
+
+  // ローディング状態
+  const { stopLoading } = useLoading();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -100,7 +106,7 @@ const PersonPage = ({ person }) => {
             err,
             router,
             "/mypage/persons",
-            setValidationErrorMessages
+            setValidationErrorMessages,
           );
         });
     } catch (err) {
@@ -126,7 +132,7 @@ const PersonPage = ({ person }) => {
               err,
               router,
               router.asPath,
-              setValidationErrorMessages
+              setValidationErrorMessages,
             );
           });
       }
@@ -141,10 +147,12 @@ const PersonPage = ({ person }) => {
       setPersonName(person.personName);
       setSex(person.sex);
       setBirthDate(new Date(person.birthDate));
+      stopLoading();
     } else {
       // 人物情報が利用できない場合の処理
       alert("人物情報を取得できませんでした");
       router.back();
+      stopLoading();
     }
   }, []);
 

@@ -1,6 +1,5 @@
 // React & Next.js
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
 
 // state
@@ -17,6 +16,9 @@ import PageHead from "../../../components/PageHead";
 // types
 import { SexType, userProfileType } from "../../types/type";
 
+// hooks
+import { useLoading } from "../../hooks/useLoading";
+
 // MUI
 import { Box, Button, Container, Typography } from "@mui/material";
 import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
@@ -25,13 +27,14 @@ import HistoryToggleOffIcon from "@mui/icons-material/HistoryToggleOff";
 import styles from "../../styles/indexStyle.module.css";
 
 export default function Home() {
-  const router = useRouter();
-
   // 共有情報
   const user = useRecoilValue(userAtom);
 
   // 人物情報
   const [person, setPerson] = useState<userProfileType>(null);
+
+  // ローディング状態
+  const { startLoading, stopLoading } = useLoading();
 
   // 年齢算出
   const calculateAge = (birthDate: Date) => {
@@ -39,14 +42,18 @@ export default function Home() {
     return differenceInYears(currentDate, birthDate);
   };
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
+    startLoading();
     if (!user) {
       setPerson(null);
+      stopLoading();
     } else {
       setPerson({
         birthDate: new Date(user.birthDate),
         sex: user.sex as SexType,
       });
+      stopLoading();
     }
   }, [user]);
 

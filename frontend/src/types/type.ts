@@ -1,5 +1,5 @@
 // 性別の型定義
-export type SexType = "male" | "female" | null;
+export type SexType = "male" | "female" | "";
 
 // 人物情報の型定義
 export type personType = {

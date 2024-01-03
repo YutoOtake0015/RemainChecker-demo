@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           })
           .catch(() => {
             alert(
-              "システムとの通信が切断されました。\nログインからやり直してください。"
+              "システムとの通信が切断されました。\nログインからやり直してください。",
             );
             signout(setUser, router);
           });
