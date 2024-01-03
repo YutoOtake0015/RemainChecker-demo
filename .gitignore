@@ -26,7 +26,6 @@ yarn-error.log*
 frontend/next-env.d.ts
 
 # TypeScript
-frontend/tsconfig.json
 *.tsbuildinfo
 
 # Vercel
