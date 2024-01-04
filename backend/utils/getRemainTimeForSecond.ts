@@ -1,3 +1,4 @@
+// modules
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -5,12 +6,20 @@ const prisma = new PrismaClient();
 const dateToSeconds = (date: Date) => {
   return Math.floor(date.getTime() / 1000);
 };
-
 const ageToSeconds = (age: number) => {
   return age * 365 * 24 * 60 * 60;
 };
 
-const getRemainTimeForSeconds = async (sex: string, birthDate: Date) => {
+type getRemainTimeForSecondsType = (
+  sex: string,
+  birthDate: Date
+) => Promise<number>;
+
+// 余命(秒)取得関数
+const getRemainTimeForSeconds: getRemainTimeForSecondsType = async (
+  sex,
+  birthDate
+) => {
   // 生年月日をDate型で取得→秒に変換
   const birthDateInSeconds = dateToSeconds(birthDate);
 
@@ -20,10 +29,14 @@ const getRemainTimeForSeconds = async (sex: string, birthDate: Date) => {
   // 年齢を秒で算出
   const ageInSeconds = currentDateTimeInSeconds - birthDateInSeconds;
 
-  // 平均寿命を取得→秒に変換
-  const currentYear = new Date().getFullYear();
-  const lifespan = await prisma.averageLife.findUnique({
-    where: { sex_year: { sex, year: String(currentYear - 1) } },
+  // 平均寿命取得
+  const lifespan = await prisma.averageLife.findFirst({
+    where: {
+      sex: sex,
+    },
+    orderBy: {
+      year: "desc",
+    },
   });
 
   if (!lifespan) {
@@ -32,6 +45,7 @@ const getRemainTimeForSeconds = async (sex: string, birthDate: Date) => {
     return 0;
   }
 
+  // 平均寿命取得後、秒に変換
   const averageLifespan = lifespan.age;
   const averageLifespanInSeconds = ageToSeconds(averageLifespan);
 

@@ -1,6 +1,5 @@
 // React & Next.js
 import React, { useState, useEffect, useReducer, useRef } from "react";
-import { useRouter } from "next/router";
 import { ClipLoader } from "react-spinners";
 
 // library
@@ -46,7 +45,6 @@ const clipStyle = {
 };
 
 const RemainingLife = React.memo(({ person }: RemainingLifeProps) => {
-  const router = useRouter();
   const [isExceeded, setIsExceeded] = useState<boolean>(false);
   const [state, dispatch] = useReducer(timerReducer, initialState);
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
@@ -61,17 +59,22 @@ const RemainingLife = React.memo(({ person }: RemainingLifeProps) => {
       try {
         if (person) {
           // 寿命を取得
-          const remainingLifeForSeconds = await getLifeSpanForSeconds(
-            person.sex,
-          );
-
-          // 単位ごとに時間をセット
-          setTime(remainingLifeForSeconds.remainTime);
+          await apiClient
+            .get("/life/lifespan", {
+              params: { sex: person.sex, year: person.birthDate },
+            })
+            .then((res) => {
+              // 単位ごとに時間をセット
+              setTime(res.data.remainTime);
+            })
+            .catch((err) => {
+              return "データを取得できませんでした";
+            });
         } else {
-          router.push("/");
+          return "データを取得できませんでした";
         }
-      } catch (error) {
-        console.error("Error fetching data:", error);
+      } catch (err) {
+        return "データを取得できませんでした";
       } finally {
         setIsLoading(false);
       }
@@ -86,13 +89,6 @@ const RemainingLife = React.memo(({ person }: RemainingLifeProps) => {
       }
     };
   }, [person]);
-
-  const getLifeSpanForSeconds = async (sex) => {
-    const fetchData = await apiClient.get("/life/lifespan", {
-      params: { sex: sex, year: person.birthDate },
-    });
-    return fetchData.data;
-  };
 
   const setTime: (totalSeconds: number) => void = (totalSeconds) => {
     // 年齢が寿命を超過していれば終了
