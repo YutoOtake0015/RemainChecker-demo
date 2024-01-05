@@ -3,12 +3,14 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 
 // state
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import errMessagesAtom from "../../../recoil/atom/errMessagesAtom";
+import userAtom from "../../../recoil/atom/userAtoms";
 
 // library
 import apiClient from "../../lib/apiClient";
 import { handleErrorResponse } from "../../lib/errorHandler";
+import { signin } from "../../lib/authHelpers";
 
 // components
 import PageHead from "../../../components/PageHead";
@@ -53,6 +55,7 @@ export default function SignUp() {
   const [birthDate, setBirthDate] = useState<Date | null>(null);
 
   // 共有情報
+  const setUser = useSetRecoilState(userAtom);
   const [validationErrorMessages, setValidationErrorMessages] =
     useRecoilState(errMessagesAtom);
 
@@ -61,8 +64,8 @@ export default function SignUp() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     startLoading();
-
     event.preventDefault();
+
     try {
       // アカウント新規登録APIを実行
       await apiClient
@@ -73,8 +76,12 @@ export default function SignUp() {
           birthDate,
           sex,
         })
-        .then(() => {
-          router.push("/auth/signin");
+        .then(async (res) => {
+          // router.push("/auth/signin");
+          // サインイン処理
+          signin(email, password, setUser, setValidationErrorMessages, router);
+
+          stopLoading();
         })
         .catch((err) => {
           handleErrorResponse(
@@ -84,9 +91,7 @@ export default function SignUp() {
             setValidationErrorMessages,
           );
         })
-        .finally(() => {
-          stopLoading();
-        });
+        .finally(() => stopLoading());
     } catch (err) {
       alert("予期しないエラーが発生しました。\nもう一度やり直してください。");
       stopLoading();
