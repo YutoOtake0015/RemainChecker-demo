@@ -14,7 +14,7 @@ import { signout } from "../lib/authHelpers";
 // types
 import { userType } from "../types/type";
 
-// MUI
+// // MUI
 import { Box } from "@mui/material";
 
 const clockStyle = {
@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           })
           .catch(() => {
             alert(
-              "システムとの通信が切断されました。\nログインからやり直してください。",
+              "システムとの通信が切断されました。\nログインからやり直してください",
             );
             signout(setUser, router);
           });

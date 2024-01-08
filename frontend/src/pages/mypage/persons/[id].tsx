@@ -69,7 +69,7 @@ const PersonPage = () => {
         setSex(response.data.person.sex);
         setBirthDate(new Date(response.data.person.birthDate));
       } catch (error) {
-        setValidationErrorMessages(["人物情報の取得に失敗しました。"]);
+        setValidationErrorMessages(["人物情報の取得に失敗しました"]);
       } finally {
         stopLoading();
       }

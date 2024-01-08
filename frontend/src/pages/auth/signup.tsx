@@ -76,8 +76,7 @@ export default function SignUp() {
           birthDate,
           sex,
         })
-        .then(async (res) => {
-          // router.push("/auth/signin");
+        .then(async () => {
           // サインイン処理
           signin(email, password, setUser, setValidationErrorMessages, router);
 
@@ -94,6 +93,7 @@ export default function SignUp() {
         .finally(() => stopLoading());
     } catch (err) {
       alert("予期しないエラーが発生しました。\nもう一度やり直してください。");
+    } finally {
       stopLoading();
     }
   };

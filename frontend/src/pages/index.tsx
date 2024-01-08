@@ -107,6 +107,7 @@ export default function Home() {
     setRemainingLifeKey(0);
   };
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     if (!user) {
       setPerson(null);
@@ -115,6 +116,7 @@ export default function Home() {
         birthDate: new Date(user.birthDate),
         sex: user.sex as SexType,
       });
+      router.push("/mypage");
     }
   }, [user]);
 

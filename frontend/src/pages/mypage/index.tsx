@@ -53,8 +53,8 @@ export default function Home() {
         birthDate: new Date(user.birthDate),
         sex: user.sex as SexType,
       });
-      stopLoading();
     }
+    stopLoading();
   }, [user]);
 
   return (

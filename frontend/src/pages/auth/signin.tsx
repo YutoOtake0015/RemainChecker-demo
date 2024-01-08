@@ -47,10 +47,13 @@ export default function SignIn() {
     startLoading();
     event.preventDefault();
 
-    // サインイン処理
-    signin(email, password, setUser, setValidationErrorMessages, router);
-
-    stopLoading();
+    try {
+      // サインイン処理
+      signin(email, password, setUser, setValidationErrorMessages, router);
+    } catch (err) {
+    } finally {
+      stopLoading();
+    }
   };
 
   return (
