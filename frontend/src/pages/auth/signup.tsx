@@ -76,11 +76,14 @@ export default function SignUp() {
           birthDate,
           sex,
         })
-        .then(async (res) => {
-          // router.push("/auth/signin");
-          // サインイン処理
-          signin(email, password, setUser, setValidationErrorMessages, router);
-
+        .then(async () => {
+          await signin(
+            email,
+            password,
+            setUser,
+            setValidationErrorMessages,
+            router,
+          );
           stopLoading();
         })
         .catch((err) => {

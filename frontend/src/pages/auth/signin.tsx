@@ -47,9 +47,7 @@ export default function SignIn() {
     startLoading();
     event.preventDefault();
 
-    // サインイン処理
-    signin(email, password, setUser, setValidationErrorMessages, router);
-
+    await signin(email, password, setUser, setValidationErrorMessages, router);
     stopLoading();
   };
 
