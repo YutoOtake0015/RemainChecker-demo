@@ -198,7 +198,10 @@ const Navbar = () => {
                   </ListItemButton>
                 </Link>
 
-                <Link href={`/mypage`} style={{ textDecoration: "none" }}>
+                <Link
+                  href={`/mypage/setting`}
+                  style={{ textDecoration: "none" }}
+                >
                   <ListItemButton sx={buttonStyle} onClick={handleMypage}>
                     <ListItemText primary={`ユーザ設定`} />
                   </ListItemButton>
