@@ -30,9 +30,7 @@ export default async function handler(
       sameSite: process.env.NEXT_PUBLIC_COOKIE_SAMESITE,
       maxAge: 365 * 24 * 60 * 60,
       path: "/",
-      domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN
-        ? process.env.NEXT_PUBLIC_COOKIE_DOMAIN
-        : "",
+      domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
     });
 
     return res.status(200).json({ message: "ログイン成功" });

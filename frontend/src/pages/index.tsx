@@ -1,11 +1,7 @@
 // React & Next.js
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-
-// state
-import { useRecoilValue } from "recoil";
-import userAtom from "../../recoil/atom/userAtoms";
 
 // utility
 import { format, differenceInYears } from "date-fns";
@@ -38,9 +34,6 @@ import styles from "../styles/indexStyle.module.css";
 
 export default function Home() {
   const router = useRouter();
-
-  // 共有情報
-  const user = useRecoilValue(userAtom);
 
   // 人物情報
   const [person, setPerson] = useState<userProfileType>(null);
@@ -106,17 +99,6 @@ export default function Home() {
     setPerson(null);
     setRemainingLifeKey(0);
   };
-
-  useEffect(() => {
-    if (!user) {
-      setPerson(null);
-    } else {
-      setPerson({
-        birthDate: new Date(user.birthDate),
-        sex: user.sex as SexType,
-      });
-    }
-  }, [user]);
 
   return (
     <>
